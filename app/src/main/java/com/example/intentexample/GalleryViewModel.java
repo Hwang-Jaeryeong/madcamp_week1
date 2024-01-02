@@ -1,19 +1,15 @@
 package com.example.intentexample;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import java.util.ArrayList;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.util.Log;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 public class GalleryViewModel extends ViewModel {
     private static final String PREFS_NAME = "GalleryAppPreferences";
