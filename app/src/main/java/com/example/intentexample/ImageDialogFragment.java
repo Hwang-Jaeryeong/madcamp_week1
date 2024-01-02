@@ -1,5 +1,6 @@
 package com.example.intentexample;
-import android.view.Gravity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -7,21 +8,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
 import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ImageDialogFragment extends DialogFragment {
+
     public interface CommentChangeListener {
         void onCommentChanged(ArrayList<String> updatedComments);
     }
@@ -35,6 +40,12 @@ public class ImageDialogFragment extends DialogFragment {
     private int position;
     private ArrayList<Bitmap> images;
     private ArrayList<String> comments;
+
+    private static final String PREF_NAME = "MyPrefs";
+    private static final String PREF_COMMENTS_KEY_PREFIX = "Comments_";
+
+    private SharedPreferences sharedPreferences;
+    private String imageKey;
 
     public static ImageDialogFragment newInstance(int position, ArrayList<Bitmap> images, ArrayList<String> comments) {
         ImageDialogFragment fragment = new ImageDialogFragment();
@@ -51,15 +62,21 @@ public class ImageDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
 
-        if (savedInstanceState != null) {
-            comments = savedInstanceState.getStringArrayList(ARG_COMMENTS);
-        }
-
         if (getArguments() != null) {
             position = getArguments().getInt(ARG_POSITION);
             images = getArguments().getParcelableArrayList(ARG_IMAGES);
-            if (comments == null) {
-                comments = getArguments().getStringArrayList(ARG_COMMENTS);
+
+            // 이미지에 대한 고유한 키 생성
+            imageKey = PREF_COMMENTS_KEY_PREFIX + position;
+
+            // SharedPreferences 초기화
+            sharedPreferences = requireContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+
+            if (savedInstanceState != null) {
+                comments = savedInstanceState.getStringArrayList(ARG_COMMENTS);
+            } else {
+                // 이미지에 대한 메모 불러오기
+                comments = loadCommentsFromSharedPreferences(imageKey);
             }
         }
     }
@@ -103,26 +120,34 @@ public class ImageDialogFragment extends DialogFragment {
                     .addToBackStack(null)
                     .commit();
         });
-
-        AlphaAnimation fadeIn = new AlphaAnimation(0.0f, 1.0f);
-        fadeIn.setDuration(500);
-        dialogPhotoView.startAnimation(fadeIn);
     }
 
     private void notifyCommentChanged() {
         if (commentChangeListener != null) {
             commentChangeListener.onCommentChanged(new ArrayList<>(comments));
         }
+
+        // 이미지에 대한 메모 저장
+        saveCommentsToSharedPreferences(imageKey, comments);
+    }
+
+    private void saveCommentsToSharedPreferences(String key, ArrayList<String> comments) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Set<String> commentSet = new HashSet<>(comments);
+        editor.putStringSet(key, commentSet);
+        editor.apply();
+    }
+
+    private ArrayList<String> loadCommentsFromSharedPreferences(String key) {
+        Set<String> commentSet = sharedPreferences.getStringSet(key, new HashSet<>());
+        return new ArrayList<>(commentSet);
     }
 
     private void addComment(LinearLayout layoutComments, String commentText) {
         TextView commentTextView = new TextView(requireContext());
         commentTextView.setText(commentText);
         commentTextView.setTextColor(Color.WHITE);
-        // 텍스트 크기를 설정
         commentTextView.setTextSize(16);
-
-        // 색상 및 모서리가 둥근 형태의 박스 스타일을 적용
         commentTextView.setBackgroundResource(R.drawable.rounded_box);
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
