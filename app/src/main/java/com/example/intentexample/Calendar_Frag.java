@@ -12,6 +12,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -220,6 +221,26 @@ public class Calendar_Frag extends Fragment {
         }
     }
 
+    private void saveCheckBoxState(CheckBox checkBox, CalendarDay date, int planPosition) {
+        // Save checkbox state to SharedPreferences based on the date and plan position
+        SharedPreferences preferences = getActivity().getSharedPreferences("CheckBoxStates", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(getCheckBoxKey(date, planPosition), checkBox.isChecked());
+        editor.apply();
+    }
+
+    private void loadCheckBoxState(CheckBox checkBox, CalendarDay date, int planPosition) {
+        // Load checkbox state from SharedPreferences based on the date and plan position
+        SharedPreferences preferences = getActivity().getSharedPreferences("CheckBoxStates", Context.MODE_PRIVATE);
+        boolean isChecked = preferences.getBoolean(getCheckBoxKey(date, planPosition), false);
+        checkBox.setChecked(isChecked);
+    }
+
+    private String getCheckBoxKey(CalendarDay date, int planPosition) {
+        // Generate a unique key for the checkbox based on the date and plan position
+        return "checkbox_" + date.toString() + "_" + planPosition;
+    }
+
     private void addPlanToScrollView(String planText, CalendarDay date) {
         TextView planView = new TextView(getActivity());
         planView.setText(planText);
@@ -252,9 +273,10 @@ public class Calendar_Frag extends Fragment {
         checkBox.setLayoutParams(new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT));
-        checkBox.setId(View.generateViewId()); // Set a unique ID for the checkbox
-        checkBox.setChecked(false); // Set the default state to unchecked
-
+        int planPosition = scrollViewLayout.getChildCount();
+        // 날짜와 계획 위치를 기반으로 체크박스에 고유 ID 생성
+        int uniqueCheckBoxId = generateCheckBoxId(date, planPosition);
+        checkBox.setId(uniqueCheckBoxId);
         // Set a custom drawable for the checkbox
         checkBox.setButtonDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.custom_checkbox));
 
@@ -309,9 +331,21 @@ public class Calendar_Frag extends Fragment {
                 updateCalendarWithEvents(true);
             }
         });
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                saveCheckBoxState(checkBox, date, planPosition);
+            }
+        });
+        // Load checkbox state from SharedPreferences
+        loadCheckBoxState(checkBox, date, planPosition);
 
         // Add RelativeLayout to the ScrollView
         scrollViewLayout.addView(relativeLayout);
+    }
+    private int generateCheckBoxId(CalendarDay date, int planPosition) {
+        // 날짜와 계획 위치를 기반으로 체크박스에 고유 ID 생성
+        return (date.hashCode() & 0xFFFFFFF) * 10 + planPosition;
     }
 
     private void deletePlanFromSharedPreferences(CalendarDay date, String planText) {
