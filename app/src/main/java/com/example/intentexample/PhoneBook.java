@@ -120,27 +120,39 @@ public class PhoneBook extends Fragment {
         ImageView phoneImage = dialogView.findViewById(R.id.profilePhoneImage);
         ImageView schoolImage = dialogView.findViewById(R.id.profileSchoolImage);
         ImageView mailImage = dialogView.findViewById(R.id.profileMailImage);
+        ImageView githubImage = dialogView.findViewById(R.id.profileGithubImage);
 
         nameImage.setImageResource(R.drawable.profile_name);
         phoneImage.setImageResource(R.drawable.profile_phone);
         schoolImage.setImageResource(R.drawable.profile_school);
         mailImage.setImageResource(R.drawable.profile_mail);
+        githubImage.setImageResource(R.drawable.github);
 
         TextView nameTextView = dialogView.findViewById(R.id.profileNameText);
         TextView phoneTextView = dialogView.findViewById(R.id.profilePhoneText);
         TextView schoolTextView = dialogView.findViewById(R.id.profileSchoolText);
         TextView mailTextView = dialogView.findViewById(R.id.profileMailText);
+        TextView githubTextView = dialogView.findViewById(R.id.profileGithubText);
 
         nameTextView.setText(contact.getName());
         phoneTextView.setText(contact.getPhone());
         schoolTextView.setText(contact.getSchool());
         mailTextView.setText(contact.getMail());
+        githubTextView.setText(contact.getGithub());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CustomDialogTheme);
 
         builder.setView(dialogView);
 
         final AlertDialog alertDialog = builder.create();
+
+        githubTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle the click event, open the URL in a browser
+                openUrlInBrowser(contact.getGithub());
+            }
+        });
 
         phoneTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,6 +177,10 @@ public class PhoneBook extends Fragment {
             }
         });
         alertDialog.show();
+    }
+    private void openUrlInBrowser(String url) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(browserIntent);
     }
 
     private void deleteContact(final Contact contact) {

@@ -5,13 +5,15 @@ public class Contact {
     private String phone;
     private String school;
     private String mail;
+    private String github;
 
     // Constructor
-    public Contact(String name, String phone, String school, String mail) {
+    public Contact(String name, String phone, String school, String mail, String github) {
         this.name = name;
         this.phone = phone;
         this.school = school;
         this.mail = mail;
+        this.github = github;
     }
 
     // Getter for name
@@ -44,6 +46,16 @@ public class Contact {
         this.school = school;
     }
 
+    // Getter for github
+    public String getGithub() {
+        return github;
+    }
+
+    // Setter for github
+    public void setGithub(String github) {
+        this.github = github;
+    }
+
     public String getMail() {
         return mail;
     }
@@ -52,6 +64,7 @@ public class Contact {
     public void setMemo(String mail) {
         this.mail = mail;
     }
+
 
     @Override
     public String toString() {
