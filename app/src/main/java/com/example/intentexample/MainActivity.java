@@ -25,17 +25,17 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
-            final int tabCallId = R.id.tab_phonebook;
-            final int tabMessageId = R.id.tab_gallery;
-            final int tabCameraId = R.id.tab_calendar;
+            final int tabPhonebookId = R.id.tab_phonebook;
+            final int tabGalleryId = R.id.tab_gallery;
+            final int tabCalendarId = R.id  .tab_calendar;
 
-            if (item.getItemId() == tabCallId) {
+            if (item.getItemId() == tabPhonebookId) {
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, phonebook).commit();
                 return true;
-            } else if (item.getItemId() == tabMessageId) {
+            } else if (item.getItemId() == tabGalleryId) {
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, gallery).commit();
                 return true;
-            } else if (item.getItemId() == tabCameraId) {
+            } else if (item.getItemId() == tabCalendarId) {
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, calendar).commit();
                 return true;
             } else {
