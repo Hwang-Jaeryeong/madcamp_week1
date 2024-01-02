@@ -10,21 +10,21 @@
     <!-- ImageView for the profile photo, centered -->
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageProfile"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:src="@drawable/ic_ownprofile"
+        android:layout_width="175dp"
+        android:layout_height="166dp"
         android:layout_gravity="center_horizontal"
-        android:padding="8dp"/>
+        android:padding="8dp"
+        android:src="@drawable/ic_ownprofile" />
 
     <!-- Button for uploading photo, placed above the text boxes -->
     <Button
         android:id="@+id/buttonUploadPhoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Upload Photo"
-        android:backgroundTint="@color/bright_green"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/bright_green"
+        android:text="Upload Photo" />
 
     <!-- EditText for Name -->
     <EditText

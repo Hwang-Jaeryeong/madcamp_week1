@@ -13,6 +13,6 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:adjustViewBounds="false"
-        android:src="@drawable/my_gif"/>
+        android:src="@drawable/start_gif"/>
 
 </RelativeLayout>
