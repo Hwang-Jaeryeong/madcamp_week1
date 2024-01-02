@@ -4,18 +4,21 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="16dp"
-    android:gravity="center">
+    android:gravity="center"
+    android:background="@color/tab_color">
 
     <NumberPicker
         android:id="@+id/numberPickerHour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"/>
+        android:layout_marginEnd="16dp"
+        android:theme="@style/TimePickerTheme"/>
 
     <NumberPicker
         android:id="@+id/numberPickerMinute"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"/>
+        android:layout_marginStart="16dp"
+        android:theme="@style/TimePickerTheme"/>
 
 </LinearLayout>

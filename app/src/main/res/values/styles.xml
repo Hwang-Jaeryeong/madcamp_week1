@@ -9,4 +9,15 @@
         <item name="android:background">@drawable/rounded_corners</item>
     </style>
 
+    <style name="TimePickerTheme" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+    </style>
+
+    <style name="CustomAlertDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="android:windowBackground">@color/tab_color</item>
+    </style>
+
+
 </resources>

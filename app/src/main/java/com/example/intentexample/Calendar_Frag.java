@@ -112,7 +112,7 @@ public class Calendar_Frag extends Fragment {
                     }
                 });
 
-                new AlertDialog.Builder(getActivity(), R.style.CustomDialogTheme)
+                new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialogTheme)
                         .setTitle("Select Time")
                         .setView(dialogView)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
