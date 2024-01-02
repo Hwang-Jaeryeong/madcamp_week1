@@ -65,10 +65,23 @@ public class Gallery extends Fragment {
         ImageButton btnAddPic = view.findViewById(R.id.btn_add_pic);
         btnAddPic.setOnClickListener(v -> openImagePicker());
 
-        // Register image picker launcher
-        registerImagePickerLauncher();
+        getParentFragmentManager().setFragmentResultListener("rotationRequestKey", this, (requestKey, bundle) -> {
+            boolean rotationChanged = bundle.getBoolean("rotationChanged", false);
+            if (rotationChanged) {
+                if (imageAdapter != null) {
+                    imageAdapter.notifyDataSetChanged();
+                }
+            }
+        });
 
         return view;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (imageAdapter != null) {
+            imageAdapter.notifyDataSetChanged();
+        }
     }
 
     private void registerImagePickerLauncher() {

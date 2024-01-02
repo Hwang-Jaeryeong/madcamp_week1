@@ -1,6 +1,7 @@
 package com.example.intentexample;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.View;
@@ -49,10 +50,18 @@ public class ImageAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         }
 
-        // Load bitmap from file path
         Bitmap bitmap = BitmapFactory.decodeFile(new File(imagePaths.get(position)).getAbsolutePath());
-        imageView.setImageBitmap(bitmap);
 
+        float rotation = getSavedRotationForImage(imagePaths.get(position));
+        imageView.setRotation(rotation);
+
+        imageView.setImageBitmap(bitmap);
         return imageView;
+    }
+
+    private float getSavedRotationForImage(String imagePath) {
+        SharedPreferences prefs = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        String key = "Comments_" + imagePath.hashCode() + "_rotation";
+        return prefs.getFloat(key, 0.0f);
     }
 }

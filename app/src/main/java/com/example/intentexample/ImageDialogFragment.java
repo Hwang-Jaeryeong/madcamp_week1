@@ -215,6 +215,9 @@ public class ImageDialogFragment extends DialogFragment {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putFloat(imageKey + "_rotation", rotation);
         editor.apply();
+        Bundle result = new Bundle();
+        result.putBoolean("rotationChanged", true);
+        getParentFragmentManager().setFragmentResult("rotationRequestKey", result);
     }
 
     private float getRotationFromSharedPreferences() {
