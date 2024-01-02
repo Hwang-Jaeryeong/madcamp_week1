@@ -33,15 +33,8 @@ public class ImageDialogFragment extends DialogFragment {
     }
 
     private CommentChangeListener commentChangeListener;
-
-    private static final String ARG_POSITION = "position";
-    private static final String ARG_IMAGE_PATHS = "image_paths";
     private static final String ARG_COMMENTS = "comments";
-
-    private int position;
-    private ArrayList<Bitmap> images;
     private ArrayList<String> comments;
-    private ArrayList<String> imagePaths;
 
 
     private static final String PREF_NAME = "MyPrefs";
@@ -49,6 +42,7 @@ public class ImageDialogFragment extends DialogFragment {
 
     private SharedPreferences sharedPreferences;
     private String imageKey;
+    private float currentRotation = 0.0f;
 
     public static ImageDialogFragment newInstance(String imagePath, ArrayList<String> comments) {
         ImageDialogFragment fragment = new ImageDialogFragment();
@@ -98,6 +92,14 @@ public class ImageDialogFragment extends DialogFragment {
         ImageButton addButton = view.findViewById(R.id.addButton);
         ImageView closeButton = view.findViewById(R.id.close_button);
 
+        currentRotation = getRotationFromSharedPreferences();
+        dialogPhotoView.setRotation(currentRotation);
+        ImageButton rotateClockwiseButton = view.findViewById(R.id.rotate_clockwise_button);
+        ImageButton rotateCounterClockwiseButton = view.findViewById(R.id.rotate_counterclockwise_button);
+
+        rotateClockwiseButton.setOnClickListener(v -> rotateImageClockwise(dialogPhotoView));
+        rotateCounterClockwiseButton.setOnClickListener(v -> rotateImageCounterClockwise(dialogPhotoView));
+
         String clickedImagePath = getArguments().getString("imagePath");
         Bitmap bitmap = BitmapFactory.decodeFile(clickedImagePath);
         dialogPhotoView.setImageBitmap(bitmap);
@@ -121,6 +123,18 @@ public class ImageDialogFragment extends DialogFragment {
                     .addToBackStack(null)
                     .commit();
         });
+    }
+    private void rotateImageCounterClockwise(PhotoView photoView) {
+        currentRotation = (currentRotation + 90) % 360;
+        photoView.setRotation(currentRotation);
+        saveRotationToSharedPreferences(currentRotation);
+    }
+
+    private void rotateImageClockwise(PhotoView photoView) {
+        currentRotation = (currentRotation - 90) % 360;
+        if (currentRotation < 0) currentRotation += 360;
+        photoView.setRotation(currentRotation);
+        saveRotationToSharedPreferences(currentRotation);
     }
 
     private void notifyCommentChanged() {
@@ -196,5 +210,14 @@ public class ImageDialogFragment extends DialogFragment {
 
     public void setCommentChangeListener(CommentChangeListener listener) {
         this.commentChangeListener = listener;
+    }
+    private void saveRotationToSharedPreferences(float rotation) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putFloat(imageKey + "_rotation", rotation);
+        editor.apply();
+    }
+
+    private float getRotationFromSharedPreferences() {
+        return sharedPreferences.getFloat(imageKey + "_rotation", 0.0f);
     }
 }

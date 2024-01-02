@@ -7,6 +7,17 @@
     android:background="@color/tab_color">
 
     <!-- 상단 이미지 부분 -->
+    <ImageButton
+        android:id="@+id/rotate_clockwise_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_counter_clockwise" />
+
+    <ImageButton
+        android:id="@+id/rotate_counterclockwise_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_clockwise" />
 
     <!-- 중간 부분: 스크롤이 가능한 레이아웃 -->
     <LinearLayout

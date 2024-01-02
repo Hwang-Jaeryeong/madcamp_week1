@@ -1,29 +1,20 @@
 package com.example.intentexample;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.graphics.Bitmap;
-import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.animation.AlphaAnimation;
 import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.io.IOException;
@@ -169,25 +160,6 @@ public class Gallery extends Fragment {
                     .replace(android.R.id.content, dialogFragment)
                     .addToBackStack(null)  // Add to back stack for back navigation support
                     .commit();
-        }
-    }
-
-
-
-
-
-    // SimpleAnimationListener class to override only onAnimationEnd
-    private static class SimpleAnimationListener implements android.view.animation.Animation.AnimationListener {
-        @Override
-        public void onAnimationStart(android.view.animation.Animation animation) {
-        }
-
-        @Override
-        public void onAnimationEnd(android.view.animation.Animation animation) {
-        }
-
-        @Override
-        public void onAnimationRepeat(android.view.animation.Animation animation) {
         }
     }
 }
