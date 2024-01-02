@@ -194,7 +194,6 @@ public class MyProfileFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
             Uri imageUri = data.getData();
@@ -204,7 +203,14 @@ public class MyProfileFragment extends Fragment {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("photoPath", imagePath);
                 editor.apply();
+
+                // Clear the ImageView's cache
+                imageProfile.setImageDrawable(null);
+
+                // Force the ImageView to update with the new image
+                imageProfile.setImageURI(null);
                 imageProfile.setImageURI(Uri.parse(imagePath));
+
             } catch (IOException e) {
                 Log.e("MyProfileFragment", "Error saving image", e);
             }
