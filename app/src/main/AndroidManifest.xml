@@ -12,9 +12,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/icon_icon"
+        android:icon="@drawable/ic_launcher"
         android:label="DevDiary"
-        android:roundIcon="@drawable/icon_icon"
+        android:roundIcon="@drawable/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.IntentExample"
         tools:targetApi="31">
