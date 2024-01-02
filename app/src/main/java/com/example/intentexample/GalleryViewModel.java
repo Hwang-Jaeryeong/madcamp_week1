@@ -40,6 +40,11 @@ public class GalleryViewModel extends ViewModel {
         editor.putString(IMAGES_KEY, savedImagePaths);
         editor.apply();
     }
+    public void removeImagePath(int position) {
+        if (position >= 0 && position < imagePaths.size()) {
+            imagePaths.remove(position);
+        }
+    }
 
     public ArrayList<String> getImagePaths() {
         return imagePaths;

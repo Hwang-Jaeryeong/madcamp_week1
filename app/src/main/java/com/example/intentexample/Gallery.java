@@ -1,5 +1,6 @@
 package com.example.intentexample;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
@@ -65,6 +66,11 @@ public class Gallery extends Fragment {
             showImageDialog(position);
         });
 
+        gridView.setOnItemLongClickListener((parent, view1, position, id) -> {
+            showDeleteConfirmationDialog(position);
+            return true; // return true to indicate the click was handled
+        });
+
         ImageButton btnAddPic = view.findViewById(R.id.btn_add_pic);
         btnAddPic.setOnClickListener(v -> openImagePicker());
 
@@ -114,6 +120,26 @@ public class Gallery extends Fragment {
 
         // Set the click listener for the button
         btnAddPic.setOnClickListener(v -> openImagePicker());
+    }
+
+    private void showDeleteConfirmationDialog(int position) {
+        new AlertDialog.Builder(getContext())
+                .setTitle("Delete Photo")
+                .setMessage("Are you sure you want to delete this photo?")
+                .setPositiveButton("Delete", (dialog, which) -> deletePhoto(position))
+                .setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.dismiss())
+                .create()
+                .show();
+    }
+    private void deletePhoto(int position) {
+        // Remove the image path from the ViewModel
+        viewModel.removeImagePath(position);
+
+        // Update the GridView
+        imageAdapter.notifyDataSetChanged();
+
+        // Update SharedPreferences
+        viewModel.saveImagePaths(requireContext());
     }
 
     private void openImagePicker() {
