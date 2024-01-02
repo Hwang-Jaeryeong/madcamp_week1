@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -6,18 +5,44 @@
     android:orientation="vertical"
     android:background="@color/tab_color">
 
-    <!-- 상단 이미지 부분 -->
-    <ImageButton
-        android:id="@+id/rotate_clockwise_button"
-        android:layout_width="wrap_content"
+    <!-- RelativeLayout to overlay the PhotoView and ImageButtons -->
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_counter_clockwise" />
+        android:background="@color/tab_color">
 
-    <ImageButton
-        android:id="@+id/rotate_counterclockwise_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_clockwise" />
+        <!-- Rotate Counter Clockwise Button -->
+        <ImageButton
+            android:id="@+id/rotate_counterclockwise_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/ic_counter_clockwise"
+            android:layout_margin="10dp"/>
+
+        <!-- Rotate Clockwise Button -->
+        <ImageButton
+            android:id="@+id/rotate_clockwise_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/rotate_counterclockwise_button"
+            android:src="@drawable/ic_clockwise"
+            android:layout_margin="10dp"/>
+
+        <!-- 오른쪽 상단에 X 이미지를 추가하여 닫기 기능 구현 -->
+        <ImageView
+            android:id="@+id/close_button"
+            android:layout_width="33dp"
+            android:layout_height="31dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/close" />
+    </RelativeLayout>
+
 
     <!-- 중간 부분: 스크롤이 가능한 레이아웃 -->
     <LinearLayout
@@ -26,19 +51,6 @@
         android:background="@color/tab_color"
         android:gravity="center"
         android:orientation="vertical">
-
-        <!-- 오른쪽 상단에 X 이미지를 추가하여 닫기 기능 구현 -->
-        <ImageView
-            android:id="@+id/close_button"
-            android:layout_width="33dp"
-            android:layout_height="31dp"
-            android:layout_gravity="end"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@drawable/close" />
 
         <!-- PhotoView로 변경 -->
         <com.github.chrisbanes.photoview.PhotoView
