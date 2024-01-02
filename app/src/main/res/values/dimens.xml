@@ -5,4 +5,7 @@
     <dimen name="vertical_margin">0dp</dimen>
     <dimen name="extra_top_margin">2dp</dimen>
     <dimen name="delete_button_margin_end">20dp</dimen>
+    <dimen name="checkbox_size">64dp</dimen>
+    <dimen name="checkbox_padding">20dp</dimen>
+    <dimen name="checkbox_top_margin">15dp</dimen>
 </resources>

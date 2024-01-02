@@ -1,5 +1,5 @@
 package com.example.intentexample;
-
+import android.widget.CheckBox;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -234,7 +234,7 @@ public class Calendar_Frag extends Fragment {
                 LinearLayout.LayoutParams.WRAP_CONTENT);
 
         if (scrollViewLayout.getChildCount() == 0) {
-            // If first plan view, set top margin to verticalMargin + extraTopMargin
+            // If the first plan view, set top margin to verticalMargin + extraTopMargin
             layoutParams.setMargins(0, verticalMargin + extraTopMargin, 0, verticalMargin);
         } else {
             // If not the first, set only the bottom margin
@@ -247,6 +247,17 @@ public class Calendar_Frag extends Fragment {
         planView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
         planView.setPadding(padding, padding, padding, padding);
 
+        // Create a CheckBox
+        CheckBox checkBox = new CheckBox(getActivity());
+        checkBox.setLayoutParams(new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT));
+        checkBox.setId(View.generateViewId()); // Set a unique ID for the checkbox
+        checkBox.setChecked(false); // Set the default state to unchecked
+
+        // Set a custom drawable for the checkbox
+        checkBox.setButtonDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.custom_checkbox));
+
         ImageButton deleteButton = new ImageButton(getActivity());
         deleteButton.setImageResource(R.drawable.red_trash); // Your red_trash.png
         deleteButton.setBackgroundColor(Color.TRANSPARENT);
@@ -257,11 +268,23 @@ public class Calendar_Frag extends Fragment {
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT));
 
+        // Add CheckBox to RelativeLayout
+        relativeLayout.addView(checkBox);
+
         // Layout params for planView
         RelativeLayout.LayoutParams planViewParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
+        planViewParams.addRule(RelativeLayout.RIGHT_OF, checkBox.getId());
         planView.setLayoutParams(planViewParams);
+
+        // Layout params for checkBox
+        RelativeLayout.LayoutParams checkBoxParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+        checkBoxParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        checkBoxParams.topMargin = getResources().getDimensionPixelSize(R.dimen.checkbox_top_margin);
+        checkBox.setLayoutParams(checkBoxParams);
 
         // Layout params for deleteButton
         RelativeLayout.LayoutParams deleteButtonParams = new RelativeLayout.LayoutParams(
@@ -273,9 +296,11 @@ public class Calendar_Frag extends Fragment {
         deleteButtonParams.setMarginEnd(marginEnd);
         deleteButton.setLayoutParams(deleteButtonParams);
 
+        // Add views to RelativeLayout
         relativeLayout.addView(planView);
         relativeLayout.addView(deleteButton);
 
+        // Set OnClickListener for deleteButton
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -284,8 +309,11 @@ public class Calendar_Frag extends Fragment {
                 updateCalendarWithEvents(true);
             }
         });
+
+        // Add RelativeLayout to the ScrollView
         scrollViewLayout.addView(relativeLayout);
     }
+
     private void deletePlanFromSharedPreferences(CalendarDay date, String planText) {
         List<String> plans = getPlansForDate(date);
         plans.remove(planText);
