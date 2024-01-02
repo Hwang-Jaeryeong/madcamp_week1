@@ -50,12 +50,11 @@ public class ImageDialogFragment extends DialogFragment {
     private SharedPreferences sharedPreferences;
     private String imageKey;
 
-    public static ImageDialogFragment newInstance(int position, ArrayList<String> imagePaths, ArrayList<String> comments) {
+    public static ImageDialogFragment newInstance(String imagePath, ArrayList<String> comments) {
         ImageDialogFragment fragment = new ImageDialogFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_POSITION, position);
-        args.putStringArrayList(ARG_IMAGE_PATHS, imagePaths); // Updated
-        args.putStringArrayList(ARG_COMMENTS, comments);
+        args.putString("imagePath", imagePath);
+        args.putStringArrayList("comments", comments);
         fragment.setArguments(args);
         return fragment;
     }
@@ -66,13 +65,12 @@ public class ImageDialogFragment extends DialogFragment {
         setRetainInstance(true);
 
         if (getArguments() != null) {
-            position = getArguments().getInt(ARG_POSITION);
-            imagePaths = getArguments().getStringArrayList(ARG_IMAGE_PATHS);
+            String imagePath = getArguments().getString("imagePath");
+            comments = getArguments().getStringArrayList("comments");
 
-            // 이미지에 대한 고유한 키 생성
-            imageKey = PREF_COMMENTS_KEY_PREFIX + position;
+            // Generate a unique key for SharedPreferences based on the image path
+            imageKey = PREF_COMMENTS_KEY_PREFIX + imagePath.hashCode(); // Example
 
-            // SharedPreferences 초기화
             sharedPreferences = requireContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
 
             if (savedInstanceState != null) {
@@ -100,20 +98,19 @@ public class ImageDialogFragment extends DialogFragment {
         ImageButton addButton = view.findViewById(R.id.addButton);
         ImageView closeButton = view.findViewById(R.id.close_button);
 
-        String clickedImagePath = imagePaths.get(position);
+        String clickedImagePath = getArguments().getString("imagePath");
         Bitmap bitmap = BitmapFactory.decodeFile(clickedImagePath);
         dialogPhotoView.setImageBitmap(bitmap);
 
         addExistingComments(layoutComments, comments);
 
         addButton.setOnClickListener(v -> {
-            String commentText = editTextSchedule.getText().toString();
-            if (!commentText.isEmpty()) {
-                addComment(layoutComments, commentText);
+            String newCommentText = editTextSchedule.getText().toString();
+            if (!newCommentText.isEmpty()) {
+                addComment(layoutComments, newCommentText);
                 editTextSchedule.setText("");
 
-                comments.add(commentText);
-
+                comments.add(newCommentText);
                 notifyCommentChanged();
             }
         });
@@ -148,25 +145,46 @@ public class ImageDialogFragment extends DialogFragment {
     }
 
     private void addComment(LinearLayout layoutComments, String commentText) {
+        LinearLayout commentLayout = new LinearLayout(requireContext());
+        commentLayout.setOrientation(LinearLayout.HORIZONTAL);
+
         TextView commentTextView = new TextView(requireContext());
         commentTextView.setText(commentText);
         commentTextView.setTextColor(Color.WHITE);
         commentTextView.setTextSize(16);
         commentTextView.setBackgroundResource(R.drawable.rounded_box);
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        );
-        params.setMargins(50, 0, 50, 16);
-        commentTextView.setLayoutParams(params);
+        ImageButton deleteButton = new ImageButton(requireContext());
+        deleteButton.setImageResource(R.drawable.red_trash);
+        deleteButton.setBackgroundColor(Color.TRANSPARENT);
+        deleteButton.setOnClickListener(v -> deleteComment(commentLayout, commentText));
 
-        layoutComments.addView(commentTextView);
+        LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
+        textViewParams.setMargins(50, 0, 0, 16);
+        commentTextView.setLayoutParams(textViewParams);
+
+        LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        deleteButton.setLayoutParams(buttonParams);
+
+        commentLayout.addView(commentTextView);
+        commentLayout.addView(deleteButton);
+        layoutComments.addView(commentLayout);
+    }
+    private void deleteComment(LinearLayout commentLayout, String commentText) {
+        // Remove the comment view
+        ((LinearLayout) commentLayout.getParent()).removeView(commentLayout);
+
+        comments.remove(commentText);
+        notifyCommentChanged();
     }
 
     private void addExistingComments(LinearLayout layoutComments, ArrayList<String> comments) {
-        for (String commentText : comments) {
-            addComment(layoutComments, commentText);
+        for (String existingCommentText : comments) {
+            addComment(layoutComments, existingCommentText);
         }
     }
 
