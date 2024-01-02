@@ -149,26 +149,27 @@ public class Gallery extends Fragment {
 
     private void showImageDialog(int position) {
         // Create an instance of ImageDialogFragment with image paths and comments data
-        ImageDialogFragment dialogFragment = ImageDialogFragment.newInstance(
-                position,
-                new ArrayList<>(viewModel.getImagePaths()),
-                new ArrayList<>(viewModel.getComments())
-        );
+        if (position >= 0 && position < viewModel.getImagePaths().size()) {
+            String imagePath = viewModel.getImagePaths().get(position);
+            ArrayList<String> comments = viewModel.getComments(imagePath);
 
-        // Set up a CommentChangeListener to handle comment changes
-        dialogFragment.setCommentChangeListener(new ImageDialogFragment.CommentChangeListener() {
-            @Override
-            public void onCommentChanged(ArrayList<String> updatedComments) {
-                // Perform actions when comments are changed
-                viewModel.setComments(updatedComments);
-            }
-        });
+            ImageDialogFragment dialogFragment = ImageDialogFragment.newInstance(imagePath, comments);
 
-        // Display the ImageDialogFragment using FragmentTransaction
-        getParentFragmentManager().beginTransaction()
-                .replace(android.R.id.content, dialogFragment)
-                .addToBackStack(null)  // Add to back stack for back navigation support
-                .commit();
+            // Set up a CommentChangeListener to handle comment changes
+            dialogFragment.setCommentChangeListener(new ImageDialogFragment.CommentChangeListener() {
+                @Override
+                public void onCommentChanged(ArrayList<String> updatedComments) {
+                    // Perform actions when comments are changed
+                    viewModel.setComments(updatedComments);
+                }
+            });
+
+            // Display the ImageDialogFragment using FragmentTransaction
+            getParentFragmentManager().beginTransaction()
+                    .replace(android.R.id.content, dialogFragment)
+                    .addToBackStack(null)  // Add to back stack for back navigation support
+                    .commit();
+        }
     }
 
 

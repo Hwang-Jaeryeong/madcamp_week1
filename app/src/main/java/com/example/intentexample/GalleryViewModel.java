@@ -12,6 +12,7 @@ import android.os.Parcelable;
 import android.util.Log;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class GalleryViewModel extends ViewModel {
@@ -19,6 +20,7 @@ public class GalleryViewModel extends ViewModel {
     private static final String IMAGES_KEY = "SavedImagePaths";
 
     private ArrayList<String> imagePaths = new ArrayList<>();
+    private HashMap<String, ArrayList<String>> imageComments = new HashMap<>();
     private ArrayList<String> comments = new ArrayList<>();
     private MutableLiveData<ArrayList<String>> commentsLiveData = new MutableLiveData<>();
 
@@ -42,7 +44,8 @@ public class GalleryViewModel extends ViewModel {
     }
     public void removeImagePath(int position) {
         if (position >= 0 && position < imagePaths.size()) {
-            imagePaths.remove(position);
+            String imagePath = imagePaths.remove(position);
+            imageComments.remove(imagePath); // Remove comments associated with the image
         }
     }
 
@@ -50,10 +53,9 @@ public class GalleryViewModel extends ViewModel {
         return imagePaths;
     }
 
-    public ArrayList<String> getComments() {
-        return comments;
+    public ArrayList<String> getComments(String imagePath) {
+        return imageComments.getOrDefault(imagePath, new ArrayList<>());
     }
-
     public LiveData<ArrayList<String>> getCommentsLiveData() {
         if (commentsLiveData.getValue() == null) {
             commentsLiveData.setValue(new ArrayList<>());
@@ -66,10 +68,11 @@ public class GalleryViewModel extends ViewModel {
         Log.d("GalleryViewModel", "Image path added. Total images: " + imagePaths.size());
     }
 
-    public void addComment(String comment) {
-        commentsLiveData.getValue().add(comment);
-        commentsLiveData.setValue(new ArrayList<>(commentsLiveData.getValue()));
-        Log.d("GalleryViewModel", "Comment added. Total comments: " + commentsLiveData.getValue().size());
+    public void addComment(String imagePath, String comment) {
+        if (!imageComments.containsKey(imagePath)) {
+            imageComments.put(imagePath, new ArrayList<>());
+        }
+        imageComments.get(imagePath).add(comment);
     }
 
     public void setComments(ArrayList<String> comments) {
