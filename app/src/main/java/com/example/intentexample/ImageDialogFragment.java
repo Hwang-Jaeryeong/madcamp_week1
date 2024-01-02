@@ -2,6 +2,7 @@ package com.example.intentexample;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -34,12 +35,14 @@ public class ImageDialogFragment extends DialogFragment {
     private CommentChangeListener commentChangeListener;
 
     private static final String ARG_POSITION = "position";
-    private static final String ARG_IMAGES = "images";
+    private static final String ARG_IMAGE_PATHS = "image_paths";
     private static final String ARG_COMMENTS = "comments";
 
     private int position;
     private ArrayList<Bitmap> images;
     private ArrayList<String> comments;
+    private ArrayList<String> imagePaths;
+
 
     private static final String PREF_NAME = "MyPrefs";
     private static final String PREF_COMMENTS_KEY_PREFIX = "Comments_";
@@ -47,11 +50,11 @@ public class ImageDialogFragment extends DialogFragment {
     private SharedPreferences sharedPreferences;
     private String imageKey;
 
-    public static ImageDialogFragment newInstance(int position, ArrayList<Bitmap> images, ArrayList<String> comments) {
+    public static ImageDialogFragment newInstance(int position, ArrayList<String> imagePaths, ArrayList<String> comments) {
         ImageDialogFragment fragment = new ImageDialogFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_POSITION, position);
-        args.putParcelableArrayList(ARG_IMAGES, images);
+        args.putStringArrayList(ARG_IMAGE_PATHS, imagePaths); // Updated
         args.putStringArrayList(ARG_COMMENTS, comments);
         fragment.setArguments(args);
         return fragment;
@@ -64,7 +67,7 @@ public class ImageDialogFragment extends DialogFragment {
 
         if (getArguments() != null) {
             position = getArguments().getInt(ARG_POSITION);
-            images = getArguments().getParcelableArrayList(ARG_IMAGES);
+            imagePaths = getArguments().getStringArrayList(ARG_IMAGE_PATHS);
 
             // 이미지에 대한 고유한 키 생성
             imageKey = PREF_COMMENTS_KEY_PREFIX + position;
@@ -97,8 +100,9 @@ public class ImageDialogFragment extends DialogFragment {
         ImageButton addButton = view.findViewById(R.id.addButton);
         ImageView closeButton = view.findViewById(R.id.close_button);
 
-        Bitmap clickedImage = images.get(position);
-        dialogPhotoView.setImageBitmap(clickedImage);
+        String clickedImagePath = imagePaths.get(position);
+        Bitmap bitmap = BitmapFactory.decodeFile(clickedImagePath);
+        dialogPhotoView.setImageBitmap(bitmap);
 
         addExistingComments(layoutComments, comments);
 

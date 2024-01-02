@@ -2,32 +2,34 @@ package com.example.intentexample;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class ImageAdapter extends BaseAdapter {
 
     private final Context context;
-    private final ArrayList<Bitmap> images;
+    private final ArrayList<String> imagePaths;
 
-    public ImageAdapter(Context context, ArrayList<Bitmap> images) {
+    public ImageAdapter(Context context, ArrayList<String> imagePaths) {
         this.context = context;
-        this.images = images;
+        this.imagePaths = imagePaths;
     }
 
     @Override
     public int getCount() {
-        return images.size();
+        return imagePaths.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return images.get(position);
+        return imagePaths.get(position);
     }
 
     @Override
@@ -47,7 +49,9 @@ public class ImageAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         }
 
-        imageView.setImageBitmap(images.get(position));
+        // Load bitmap from file path
+        Bitmap bitmap = BitmapFactory.decodeFile(new File(imagePaths.get(position)).getAbsolutePath());
+        imageView.setImageBitmap(bitmap);
 
         return imageView;
     }

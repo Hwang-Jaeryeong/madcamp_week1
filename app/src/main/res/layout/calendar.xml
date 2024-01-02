@@ -73,7 +73,6 @@
             android:background="@color/bottom_nav_background"
             android:src="@drawable/ic_add"
             android:padding="10dp" />
-
     </LinearLayout>
 
 
