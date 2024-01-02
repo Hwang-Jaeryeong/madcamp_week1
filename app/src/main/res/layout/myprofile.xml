@@ -21,9 +21,10 @@
         android:id="@+id/buttonUploadPhoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="0dp"
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/bright_green"
+        android:fontFamily="@font/applefont"
         android:text="Upload Photo" />
 
     <!-- EditText for Name -->
@@ -33,8 +34,9 @@
         android:layout_height="48dp"
         android:hint="Name"
         android:paddingLeft="10dp"
-        android:textColorHint="@color/white"
+        android:textColorHint="@color/gray"
         android:textColor="@color/white"
+        android:fontFamily="@font/hel"
         android:background="@drawable/myprofile_editbox"
         android:inputType="textPersonName"/>
 
@@ -44,9 +46,10 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginTop="5dp"
+        android:fontFamily="@font/hel"
         android:hint="Phone"
         android:paddingLeft="10dp"
-        android:textColorHint="@color/white"
+        android:textColorHint="@color/gray"
         android:textColor="@color/white"
         android:background="@drawable/myprofile_editbox"
         android:inputType="phone"/>
@@ -58,8 +61,9 @@
         android:layout_height="48dp"
         android:hint="School"
         android:layout_marginTop="5dp"
+        android:fontFamily="@font/hel"
         android:paddingLeft="10dp"
-        android:textColorHint="@color/white"
+        android:textColorHint="@color/gray"
         android:textColor="@color/white"
         android:background="@drawable/myprofile_editbox"
         android:inputType="text"/>
@@ -69,9 +73,10 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:hint="Mail"
+        android:fontFamily="@font/hel"
         android:layout_marginTop="5dp"
         android:paddingLeft="10dp"
-        android:textColorHint="@color/white"
+        android:textColorHint="@color/gray"
         android:textColor="@color/white"
         android:background="@drawable/myprofile_editbox"
         android:inputType="text"/>
@@ -81,9 +86,10 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:hint="Github"
+        android:fontFamily="@font/hel"
         android:layout_marginTop="5dp"
         android:paddingLeft="10dp"
-        android:textColorHint="@color/white"
+        android:textColorHint="@color/gray"
         android:textColor="@color/white"
         android:background="@drawable/myprofile_editbox"
         android:inputType="text"/>
@@ -92,15 +98,17 @@
         android:id="@+id/buttonSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save"
+        android:layout_gravity="center_horizontal"
         android:backgroundTint="@color/bright_green"
-        android:layout_gravity="center_horizontal"/>
+        android:fontFamily="@font/applefont"
+        android:text="Save" />
 
     <Button
         android:id="@+id/buttonGenerateQR"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Generate QR Code"
+        android:layout_gravity="center_horizontal"
         android:backgroundTint="@color/bright_green"
-        android:layout_gravity="center_horizontal"/>
+        android:fontFamily="@font/applefont"
+        android:text="Generate QR Code" />
 </LinearLayout>

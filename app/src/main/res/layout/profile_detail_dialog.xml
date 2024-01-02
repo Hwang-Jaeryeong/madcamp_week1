@@ -28,6 +28,7 @@
         android:textColor="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/applefont"
         android:layout_toEndOf="@id/profileNameImage"
         android:layout_marginStart="22dp"
         android:layout_marginTop="5dp"
@@ -48,6 +49,7 @@
         android:layout_width="wrap_content"
         android:textColor="@color/white"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/applefont"
         android:layout_toEndOf="@id/profilePhoneImage"
         android:layout_marginStart="22dp"
         android:layout_marginTop="5dp"
@@ -65,6 +67,7 @@
     <TextView
         android:id="@+id/profileSchoolText"
         android:textColor="@color/white"
+        android:fontFamily="@font/applefont"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/profileSchoolImage"
@@ -84,6 +87,7 @@
     <TextView
         android:id="@+id/profileMailText"
         android:textColor="@color/white"
+        android:fontFamily="@font/applefont"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/profileMailImage"
@@ -103,6 +107,7 @@
     <TextView
         android:id="@+id/profileGithubText"
         android:textColor="@color/white"
+        android:fontFamily="@font/applefont"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/profileGithubImage"

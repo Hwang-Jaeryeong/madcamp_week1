@@ -24,6 +24,7 @@
         android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="Delete Profile?"
+        android:fontFamily="@font/hel_black"
         android:textColor="@android:color/white"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -36,6 +37,7 @@
         android:layout_below="@id/titleTextView"
         android:layout_marginTop="7dp"
         android:gravity="center"
+        android:fontFamily="@font/hel"
         android:text="This profile will be removed from all your synced devices. This action cannot be undone."
         android:textColor="@android:color/white"
         android:textSize="16sp" />

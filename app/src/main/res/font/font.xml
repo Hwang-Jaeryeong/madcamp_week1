@@ -8,4 +8,16 @@
         android:fontStyle="normal"
         android:fontWeight="100"
         android:font="@font/uber_move_medium"/>
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="100"
+        android:font="@font/applefont"/>
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="100"
+        android:font="@font/hel"/>
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="100"
+        android:font="@font/hel_black"/>
 </font-family>

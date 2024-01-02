@@ -244,6 +244,7 @@ public class Calendar_Frag extends Fragment {
     private void addPlanToScrollView(String planText, CalendarDay date) {
         TextView planView = new TextView(getActivity());
         planView.setText(planText);
+        planView.setTextAppearance(getActivity(), R.style.CustomTextViewStyle);
 
         int padding = getResources().getDimensionPixelSize(R.dimen.plan_padding);
         int textSize = getResources().getDimensionPixelSize(R.dimen.plan_text_size);
