@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.github.chrisbanes.photoview.PhotoView;
@@ -163,6 +165,9 @@ public class ImageDialogFragment extends DialogFragment {
         commentLayout.setOrientation(LinearLayout.HORIZONTAL);
 
         TextView commentTextView = new TextView(requireContext());
+        Typeface helFont = ResourcesCompat.getFont(requireContext(), R.font.hel);
+        commentTextView.setTypeface(helFont);
+
         commentTextView.setText(commentText);
         commentTextView.setTextColor(Color.WHITE);
         commentTextView.setTextSize(16);

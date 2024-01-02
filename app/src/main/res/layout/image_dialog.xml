@@ -95,8 +95,9 @@
             android:background="@drawable/rounded_edittext_calendar"
             android:hint="Write a comment..."
             android:padding="10dp"
+            android:fontFamily="@font/hel"
             android:textColor="@android:color/white"
-            android:textColorHint="@android:color/white" />
+            android:textColorHint="@color/gray" />
 
         <ImageButton
             android:id="@+id/addButton"
