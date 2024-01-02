@@ -1,5 +1,6 @@
 package com.example.intentexample;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
@@ -32,97 +33,113 @@ public class Gallery extends Fragment {
 
     private GalleryViewModel viewModel;
     private ImageAdapter imageAdapter;
-    private Uri selectedImage;
-    private MutableLiveData<ArrayList<String>> commentsLiveData;
-    // CommentChangeListener 인터페이스 정의
-    public interface CommentChangeListener {
-        void onCommentChanged(ArrayList<String> updatedComments);
-    }
-
-    private CommentChangeListener commentChangeListener;
-
-    // setCommentChangeListener 메서드 정의
-    public void setCommentChangeListener(CommentChangeListener listener) {
-        this.commentChangeListener = listener;
-    }
-
-    public LiveData<ArrayList<String>> getComments() {
-        if (commentsLiveData == null) {
-            commentsLiveData = new MutableLiveData<>();
-            commentsLiveData.setValue(new ArrayList<>());
-        }
-        return commentsLiveData;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("YourFragment", "onResume called");
-        // onResume에서 이미지를 초기화하고 업데이트
-        if (imageAdapter == null) {
-            imageAdapter = new ImageAdapter(requireContext(), viewModel.getImages());
-            GridView gridView = requireView().findViewById(R.id.feed_gallery_view);
-            gridView.setAdapter(imageAdapter);
-        } else {
-            // 이미 어댑터가 생성되었으면 이미지 데이터만 업데이트
-            imageAdapter.notifyDataSetChanged();
-        }
-
-    }
+    private ActivityResultLauncher<String> pickImageLauncher;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(requireActivity()).get(GalleryViewModel.class);
 
-        // LiveData를 관찰하여 댓글이 변경될 때마다 처리
+        // Load saved image paths when the fragment is created
+        viewModel.loadImagePaths(requireContext());
+
+        // Observe LiveData for comments
         viewModel.getCommentsLiveData().observe(this, comments -> {
-            // 댓글이 변경되었을 때 수행할 작업
+            // Handle comment changes if necessary
         });
     }
 
-
-    private ActivityResultLauncher<String> pickImageLauncher;
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.gallery, container, false);
 
-        imageAdapter = new ImageAdapter(requireContext(), viewModel.getImages());
+        imageAdapter = new ImageAdapter(requireContext(), viewModel.getImagePaths());
 
         // Set up the GridView
         GridView gridView = view.findViewById(R.id.feed_gallery_view);
         gridView.setAdapter(imageAdapter);
 
-        // Set up item click listener
         gridView.setOnItemClickListener((parent, view1, position, id) -> {
-            Bitmap clickedImage = viewModel.getImages().get(position);
-            Toast.makeText(requireContext(), "Clicked: " + clickedImage, Toast.LENGTH_SHORT).show();
+            String clickedImagePath = viewModel.getImagePaths().get(position);
+            Toast.makeText(requireContext(), "Clicked: " + clickedImagePath, Toast.LENGTH_SHORT).show();
             showImageDialog(position);
+        });
+
+        gridView.setOnItemLongClickListener((parent, view1, position, id) -> {
+            showDeleteConfirmationDialog(position);
+            return true; // return true to indicate the click was handled
         });
 
         ImageButton btnAddPic = view.findViewById(R.id.btn_add_pic);
         btnAddPic.setOnClickListener(v -> openImagePicker());
 
-        // 이미지 피커 런처 등록
+        // Register image picker launcher
         registerImagePickerLauncher();
 
         return view;
     }
+
     private void registerImagePickerLauncher() {
-        pickImageLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), result -> {
-            if (result != null) {
-                selectedImage = result;
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), selectedImage);
-                    viewModel.addImage(bitmap);
-                    imageAdapter.notifyDataSetChanged();
-                } catch (IOException e) {
-                    e.printStackTrace();
+        pickImageLauncher = registerForActivityResult(
+                new ActivityResultContracts.GetContent(),
+                result -> {
+                    if (result != null) {
+                        try {
+                            // Convert Uri to Bitmap
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), result);
+
+                            // Save the bitmap to internal storage and get the path
+                            String imagePath = InternalStorageUtil.saveToInternalStorage(requireContext(), bitmap);
+
+                            // Add the image path to the view model
+                            viewModel.addImagePath(imagePath);
+                            imageAdapter.notifyDataSetChanged();
+
+                            // Save updated paths to SharedPreferences
+                            viewModel.saveImagePaths(requireContext());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            Toast.makeText(requireContext(), "Failed to save image", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Toast.makeText(requireContext(), "Image upload failed", Toast.LENGTH_LONG).show();
+                    }
                 }
-            } else {
-                Toast.makeText(requireContext(), "사진 업로드 실패", Toast.LENGTH_LONG).show();
-            }
-        });
+        );
+    }
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Initialize and register the image picker launcher
+        registerImagePickerLauncher();
+
+        // Get the button from the layout
+        ImageButton btnAddPic = view.findViewById(R.id.btn_add_pic);
+
+        // Set the click listener for the button
+        btnAddPic.setOnClickListener(v -> openImagePicker());
+    }
+
+    private void showDeleteConfirmationDialog(int position) {
+        new AlertDialog.Builder(getContext())
+                .setTitle("Delete Photo")
+                .setMessage("Are you sure you want to delete this photo?")
+                .setPositiveButton("Delete", (dialog, which) -> deletePhoto(position))
+                .setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.dismiss())
+                .create()
+                .show();
+    }
+    private void deletePhoto(int position) {
+        // Remove the image path from the ViewModel
+        viewModel.removeImagePath(position);
+
+        // Update the GridView
+        imageAdapter.notifyDataSetChanged();
+
+        // Update SharedPreferences
+        viewModel.saveImagePaths(requireContext());
     }
 
     private void openImagePicker() {
@@ -131,10 +148,10 @@ public class Gallery extends Fragment {
 
 
     private void showImageDialog(int position) {
-        // 이미지 및 댓글 데이터와 함께 ImageDialogFragment의 인스턴스 생성
+        // Create an instance of ImageDialogFragment with image paths and comments data
         ImageDialogFragment dialogFragment = ImageDialogFragment.newInstance(
                 position,
-                new ArrayList<>(viewModel.getImages()),
+                new ArrayList<>(viewModel.getImagePaths()),
                 new ArrayList<>(viewModel.getComments())
         );
 
@@ -142,15 +159,15 @@ public class Gallery extends Fragment {
         dialogFragment.setCommentChangeListener(new ImageDialogFragment.CommentChangeListener() {
             @Override
             public void onCommentChanged(ArrayList<String> updatedComments) {
-                // 댓글이 변경되었을 때 수행할 작업
+                // Perform actions when comments are changed
                 viewModel.setComments(updatedComments);
             }
         });
 
-        // FragmentTransaction을 사용하여 ImageDialogFragment를 표시합니다.
+        // Display the ImageDialogFragment using FragmentTransaction
         getParentFragmentManager().beginTransaction()
                 .replace(android.R.id.content, dialogFragment)
-                .addToBackStack(null)  // 백 스택에 추가하여 뒤로 가기 동작을 지원
+                .addToBackStack(null)  // Add to back stack for back navigation support
                 .commit();
     }
 

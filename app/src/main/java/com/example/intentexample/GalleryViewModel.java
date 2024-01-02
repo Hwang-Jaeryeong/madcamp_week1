@@ -1,4 +1,6 @@
 package com.example.intentexample;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 
 import androidx.lifecycle.LiveData;
@@ -9,15 +11,43 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class GalleryViewModel extends ViewModel {
-    private ArrayList<Bitmap> images = new ArrayList<>();
+    private static final String PREFS_NAME = "GalleryAppPreferences";
+    private static final String IMAGES_KEY = "SavedImagePaths";
+
+    private ArrayList<String> imagePaths = new ArrayList<>();
     private ArrayList<String> comments = new ArrayList<>();
     private MutableLiveData<ArrayList<String>> commentsLiveData = new MutableLiveData<>();
 
-    public ArrayList<Bitmap> getImages() {
-        return images;
+    // Load image paths from SharedPreferences
+    public void loadImagePaths(Context context) {
+        imagePaths.clear(); // Clear existing paths
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String savedImagePaths = prefs.getString(IMAGES_KEY, "");
+        if (!savedImagePaths.isEmpty()) {
+            imagePaths.addAll(Arrays.asList(savedImagePaths.split(",")));
+        }
+    }
+
+    // Save image paths to SharedPreferences
+    public void saveImagePaths(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        String savedImagePaths = String.join(",", imagePaths);
+        editor.putString(IMAGES_KEY, savedImagePaths);
+        editor.apply();
+    }
+    public void removeImagePath(int position) {
+        if (position >= 0 && position < imagePaths.size()) {
+            imagePaths.remove(position);
+        }
+    }
+
+    public ArrayList<String> getImagePaths() {
+        return imagePaths;
     }
 
     public ArrayList<String> getComments() {
@@ -25,16 +55,15 @@ public class GalleryViewModel extends ViewModel {
     }
 
     public LiveData<ArrayList<String>> getCommentsLiveData() {
-        if (commentsLiveData == null) {
-            commentsLiveData = new MutableLiveData<>();
+        if (commentsLiveData.getValue() == null) {
             commentsLiveData.setValue(new ArrayList<>());
         }
         return commentsLiveData;
     }
 
-    public void addImage(Bitmap image) {
-        images.add(image);
-        Log.d("GalleryViewModel", "Image added. Total images: " + images.size());
+    public void addImagePath(String imagePath) {
+        imagePaths.add(imagePath);
+        Log.d("GalleryViewModel", "Image path added. Total images: " + imagePaths.size());
     }
 
     public void addComment(String comment) {
@@ -47,11 +76,11 @@ public class GalleryViewModel extends ViewModel {
         commentsLiveData.setValue(comments);
     }
 
+    @Override
     protected void onCleared() {
         super.onCleared();
-        // ViewModel이 파괴될 때 호출되는 메서드
-        // 여기에서 데이터 초기화 또는 갱신 코드 추가
-        images.clear();
+        // ViewModel is destroyed
+        imagePaths.clear();
         commentsLiveData.setValue(new ArrayList<>());
     }
 }
