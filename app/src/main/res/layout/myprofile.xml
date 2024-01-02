@@ -9,13 +9,23 @@
     android:gravity="center_horizontal">
 
     <!-- ImageView for the profile photo, centered -->
-    <ImageView
-        android:id="@+id/backButton"
-        android:layout_width="96dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        android:layout_marginRight="180dp"
-        app:srcCompat="@drawable/backbutton" />
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/backbutton"/>
+
+        <!-- Empty View to push backButton to the left -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+    </LinearLayout>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageProfile"
