@@ -124,13 +124,13 @@ public class ImageDialogFragment extends DialogFragment {
                     .commit();
         });
     }
-    private void rotateImageCounterClockwise(PhotoView photoView) {
+    private void rotateImageClockwise(PhotoView photoView) {
         currentRotation = (currentRotation + 90) % 360;
         photoView.setRotation(currentRotation);
         saveRotationToSharedPreferences(currentRotation);
     }
 
-    private void rotateImageClockwise(PhotoView photoView) {
+    private void rotateImageCounterClockwise(PhotoView photoView) {
         currentRotation = (currentRotation - 90) % 360;
         if (currentRotation < 0) currentRotation += 360;
         photoView.setRotation(currentRotation);

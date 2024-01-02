@@ -12,9 +12,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
-        android:label="Gif_Splash_Screen"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:icon="@mipmap/icon_icon"
+        android:label="DevDiary"
+        android:roundIcon="@mipmap/icon_icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.IntentExample"
         tools:targetApi="31">
