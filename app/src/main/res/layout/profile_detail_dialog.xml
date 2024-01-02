@@ -92,11 +92,32 @@
         android:layout_alignTop="@id/profileMailImage"
         android:text=""/>
 
+    <ImageView
+        android:id="@+id/profileGithubImage"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@id/profileMailImage"
+        android:layout_marginTop="25dp"
+        android:src="@drawable/github" />
+
+    <TextView
+        android:id="@+id/profileGithubText"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/profileGithubImage"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="5dp"
+        android:layout_alignTop="@id/profileGithubImage"
+        android:text=""
+        android:clickable="true"
+        android:onClick="onGithubTextClicked"/>
+
     <ImageButton
         android:id="@+id/deleteButton"
         android:layout_width="34dp"
         android:layout_height="32dp"
-        android:layout_below="@id/profileMailImage"
+        android:layout_below="@id/profileGithubImage"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="0dp"

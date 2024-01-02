@@ -46,6 +46,7 @@ public class MyProfileFragment extends Fragment {
         EditText editTextPhone = view.findViewById(R.id.editTextPhone);
         EditText editTextSchool = view.findViewById(R.id.editTextSchool);
         EditText editTextMail = view.findViewById(R.id.editTextMail);
+        EditText editTextGithub = view.findViewById(R.id.editTextGithub);
         imageProfile = view.findViewById(R.id.imageProfile);
 
         // Load saved data
@@ -55,11 +56,13 @@ public class MyProfileFragment extends Fragment {
         String phone = sharedPreferences.getString("phone", "");
         String school = sharedPreferences.getString("school", "");
         String mail = sharedPreferences.getString("mail", "");
+        String github = sharedPreferences.getString("github", "");
 
         editTextName.setText(name);
         editTextPhone.setText(phone);
         editTextSchool.setText(school);
         editTextMail.setText(mail);
+        editTextGithub.setText(github);
 
         if (photoPath != null) {
             imageProfile.setImageURI(Uri.parse(photoPath));
@@ -105,6 +108,7 @@ public class MyProfileFragment extends Fragment {
         String phone = sharedPreferences.getString("phone", "");
         String school = sharedPreferences.getString("school", "");
         String mail = sharedPreferences.getString("mail", "");
+        String github = sharedPreferences.getString("github", "");
 
         JSONObject jsonObject = new JSONObject();
         try {
@@ -112,6 +116,7 @@ public class MyProfileFragment extends Fragment {
             jsonObject.put("phone", phone);
             jsonObject.put("school", school);
             jsonObject.put("mail", mail);
+            jsonObject.put("github", github);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -162,11 +167,13 @@ public class MyProfileFragment extends Fragment {
         EditText editTextPhone = getView().findViewById(R.id.editTextPhone);
         EditText editTextSchool = getView().findViewById(R.id.editTextSchool);
         EditText editTextMail = getView().findViewById(R.id.editTextMail);
+        EditText editTextGithub = getView().findViewById(R.id.editTextGithub);
 
         String name = editTextName.getText().toString();
         String phone = editTextPhone.getText().toString();
         String school = editTextSchool.getText().toString();
         String mail = editTextMail.getText().toString();
+        String github = editTextGithub.getText().toString();
 
         SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -174,6 +181,7 @@ public class MyProfileFragment extends Fragment {
         editor.putString("phone", phone);
         editor.putString("school", school);
         editor.putString("mail", mail);
+        editor.putString("github", github);
         editor.apply();
     }
 

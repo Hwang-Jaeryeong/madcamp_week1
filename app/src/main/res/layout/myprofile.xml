@@ -76,6 +76,18 @@
         android:background="@drawable/myprofile_editbox"
         android:inputType="text"/>
 
+    <EditText
+        android:id="@+id/editTextGithub"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Github"
+        android:layout_marginTop="5dp"
+        android:paddingLeft="10dp"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:background="@drawable/myprofile_editbox"
+        android:inputType="text"/>
+
     <Button
         android:id="@+id/buttonSave"
         android:layout_width="wrap_content"
