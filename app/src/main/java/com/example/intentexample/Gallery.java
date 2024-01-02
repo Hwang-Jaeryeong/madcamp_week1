@@ -52,8 +52,6 @@ public class Gallery extends Fragment {
         gridView.setAdapter(imageAdapter);
 
         gridView.setOnItemClickListener((parent, view1, position, id) -> {
-            String clickedImagePath = viewModel.getImagePaths().get(position);
-            Toast.makeText(requireContext(), "Clicked: " + clickedImagePath, Toast.LENGTH_SHORT).show();
             showImageDialog(position);
         });
 
