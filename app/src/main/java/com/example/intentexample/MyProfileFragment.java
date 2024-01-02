@@ -15,12 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.*;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
@@ -49,6 +51,7 @@ public class MyProfileFragment extends Fragment {
         EditText editTextGithub = view.findViewById(R.id.editTextGithub);
         imageProfile = view.findViewById(R.id.imageProfile);
 
+
         // Load saved data
         SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         String photoPath = sharedPreferences.getString("photoPath", null);
@@ -68,6 +71,21 @@ public class MyProfileFragment extends Fragment {
             imageProfile.setImageURI(Uri.parse(photoPath));
         }
 
+        // 뒤로 가기 버튼 ImageView 찾기
+        ImageView backButton = view.findViewById(R.id.backButton);
+
+        // 뒤로 가기 버튼에 대한 OnClickListener 설정
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getParentFragmentManager();
+                if (fragmentManager.getBackStackEntryCount() > 0) {
+                    fragmentManager.popBackStack(); // 이전 Fragment로 돌아가기
+                }
+            }
+        });
+
+
         Button buttonUploadPhoto = view.findViewById(R.id.buttonUploadPhoto);
         buttonUploadPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +102,7 @@ public class MyProfileFragment extends Fragment {
                 Toast.makeText(getActivity(), "Saved!", Toast.LENGTH_SHORT).show();
             }
         });
-        Button buttonGenerateQR = view.findViewById(R.id.buttonGenerateQR);
+        ImageButton buttonGenerateQR = view.findViewById(R.id.buttonGenerateQR);
         buttonGenerateQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
