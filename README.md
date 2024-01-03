@@ -14,6 +14,11 @@
 * 자유
 <br>
 
+
+[splash screen]
+
+<img src="https://github.com/Hwang-Jaeryeong/madcamp_week1/assets/113423770/461c162d-4114-4d59-b3f2-eb9cd35cfbb9"  width="170" height="400"/>
+
 ### 1번탭
 ***
 #### 1) QR 코드를 통해 사용자 정보 관리
