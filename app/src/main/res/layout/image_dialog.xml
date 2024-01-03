@@ -17,17 +17,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:src="@drawable/ic_counter_clockwise"
-            android:layout_margin="10dp"/>
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/tab_color"
+            android:src="@drawable/ic_counter_clockwise" />
 
         <!-- Rotate Clockwise Button -->
         <ImageButton
             android:id="@+id/rotate_clockwise_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/tab_color"
             android:layout_toEndOf="@id/rotate_counterclockwise_button"
-            android:src="@drawable/ic_clockwise"
-            android:layout_margin="10dp"/>
+            android:src="@drawable/ic_clockwise" />
 
         <!-- 오른쪽 상단에 X 이미지를 추가하여 닫기 기능 구현 -->
         <ImageView
