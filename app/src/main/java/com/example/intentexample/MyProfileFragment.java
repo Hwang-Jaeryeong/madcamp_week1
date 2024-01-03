@@ -120,6 +120,7 @@ public class MyProfileFragment extends Fragment {
 
         return view;
     }
+
     private String getProfileDataAsJson() {
         SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         String name = sharedPreferences.getString("name", "");
@@ -210,7 +211,6 @@ public class MyProfileFragment extends Fragment {
             editor.putInt("profileImageId", selectedImageResId);
         }
 
-        editor.apply();
         editor.apply();
     }
 
