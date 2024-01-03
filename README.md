@@ -168,6 +168,8 @@ private void registerImagePickerLauncher() {
 fragment 밑에는 comment를 달 수 있도록 화면을 구성했다. 코멘트를 등록해 간단한 메모 형식으로 자신의 코드 진행 상황을 작성할 수 있다.
 메모와 사진 등록 전부 다 동적인 요소이기에 앱을 껐다 키거나 창을 닫았다 열어도 유지되도록 하는 것에 상당 시간을 쏟아 해결하였는데 이미지는 byte 형식으로 바꾸어 map에 저장하여 sharedPreferenced 와 함께 이용했으며 
 메모와 해당 사진이 연동되게 사진과 메모에 고유의 id를 부여하여 서로 연동시킨 후 SharedPreferences에 함꼐 저장하였다.
+
+
 ```java
 public static ImageDialogFragment newInstance(String imagePath, ArrayList<String> comments) {
         ImageDialogFragment fragment = new ImageDialogFragment();
