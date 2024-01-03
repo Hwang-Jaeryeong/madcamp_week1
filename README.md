@@ -14,6 +14,11 @@
 * 자유
 <br>
 
+
+[splash screen]
+
+<img src="https://github.com/Hwang-Jaeryeong/madcamp_week1/assets/113423770/461c162d-4114-4d59-b3f2-eb9cd35cfbb9"  width="170" height="400"/>
+
 ### 1번탭
 ***
 #### 1) QR 코드를 통해 사용자 정보 관리
@@ -300,3 +305,5 @@ private void saveCheckBoxState(CheckBox checkBox, CalendarDay date, int planPosi
 ***
 * com.journeyapps:zxing-android-embedded:4.1.0  
 zxing 라이브러리를 통해 QR 코드를 찍고 생성
+
+- 캘린더에는 원래 캘린더 라이브러리를 썼는데 커스터마이징이 안되어서 material calendarview를 사용했습니다.
