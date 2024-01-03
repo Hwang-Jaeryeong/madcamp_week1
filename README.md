@@ -305,3 +305,5 @@ private void saveCheckBoxState(CheckBox checkBox, CalendarDay date, int planPosi
 ***
 * com.journeyapps:zxing-android-embedded:4.1.0  
 zxing 라이브러리를 통해 QR 코드를 찍고 생성
+
+- 캘린더에는 원래 캘린더 라이브러리를 썼는데 커스터마이징이 안되어서 material calendarview를 사용했습니다.
