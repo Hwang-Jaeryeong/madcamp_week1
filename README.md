@@ -198,8 +198,8 @@ public static ImageDialogFragment newInstance(String imagePath, ArrayList<String
                 comments = loadCommentsFromSharedPreferences(imageKey);
             }
         }
-    }
-```
+    }```
+
 
 ### 3번탭
 ***
