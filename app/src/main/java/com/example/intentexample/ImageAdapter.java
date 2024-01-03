@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -19,6 +20,16 @@ public class ImageAdapter extends BaseAdapter {
     private ArrayList<String> imagePaths; // for external image paths
     private int[] imageResIds; // for drawable resource IDs
     private boolean useDrawableResources = false;
+    private final int[] imageIds = new int[]{
+            R.drawable.default_image1,
+            R.drawable.default_image2,
+            R.drawable.default_image3,
+            R.drawable.default_image4,
+            R.drawable.default_image5,
+            R.drawable.default_image6,
+            R.drawable.default_image7,
+            R.drawable.default_image8
+    };
 
     // Constructor for external image paths
     public ImageAdapter(Context context, ArrayList<String> imagePaths) {
@@ -54,12 +65,13 @@ public class ImageAdapter extends BaseAdapter {
         ImageView imageView;
 
         if (convertView == null) {
-            imageView = new ImageView(context);
-            imageView.setLayoutParams(new ViewGroup.LayoutParams(440, 440));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            convertView = LayoutInflater.from(context).inflate(R.layout.grid_item, parent, false);
+            imageView = convertView.findViewById(R.id.imageViewGridItem);
         } else {
             imageView = (ImageView) convertView;
         }
+        int imageResId = imageIds[position];
+        imageView.setImageResource(imageResId);
 
         if (useDrawableResources) {
             imageView.setImageResource(imageResIds[position]);

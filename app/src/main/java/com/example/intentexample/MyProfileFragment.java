@@ -232,7 +232,12 @@ public class MyProfileFragment extends Fragment {
     }
 
     private void showImageChoiceDialog() {
-        final int[] imageIds = new int[]{R.drawable.default_image1, R.drawable.default_image2, R.drawable.default_image3}; // add your image IDs here
+        final int[] imageIds = new int[]{
+                R.drawable.default_image1, R.drawable.default_image2, R.drawable.default_image3,
+                R.drawable.default_image4, R.drawable.default_image5, R.drawable.default_image6,
+                R.drawable.default_image7, R.drawable.default_image8
+        };
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.image_choice_dialog, null);
@@ -240,16 +245,21 @@ public class MyProfileFragment extends Fragment {
 
         AlertDialog dialog = builder.create();
 
-        GridView gridView = dialogView.findViewById(R.id.gridView); // make sure you have a GridView in your dialog layout
+        GridView gridView = dialogView.findViewById(R.id.gridView);
         gridView.setAdapter(new ImageAdapter(getActivity(), imageIds));
+        gridView.setNumColumns(4); // Adjust as needed
+
         gridView.setOnItemClickListener((parent, view, position, id) -> {
             selectedImageResId = imageIds[position];
             updateProfileImage(selectedImageResId);
-            uploadedImagePath = null; // Reset the uploaded image path
-            dialog.dismiss(); // This should dismiss the dialog without issue
+            uploadedImagePath = null;
+            dialog.dismiss();
         });
-        Button closeButton = dialogView.findViewById(R.id.buttonClose); // Ensure this ID is correct
+
+        // Setup the close button
+        Button closeButton = dialogView.findViewById(R.id.buttonClose);
         closeButton.setOnClickListener(v -> dialog.dismiss());
+
         dialog.show();
     }
 
