@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -163,34 +164,43 @@ public class ImageDialogFragment extends DialogFragment {
     private void addComment(LinearLayout layoutComments, String commentText) {
         LinearLayout commentLayout = new LinearLayout(requireContext());
         commentLayout.setOrientation(LinearLayout.HORIZONTAL);
+        commentLayout.setBackgroundResource(R.drawable.rounded_box);
+        commentLayout.setGravity(Gravity.CENTER_VERTICAL);
 
+        // Create the TextView for the comment
         TextView commentTextView = new TextView(requireContext());
         Typeface helFont = ResourcesCompat.getFont(requireContext(), R.font.hel);
         commentTextView.setTypeface(helFont);
-
         commentTextView.setText(commentText);
         commentTextView.setTextColor(Color.WHITE);
-        commentTextView.setTextSize(16);
-        commentTextView.setBackgroundResource(R.drawable.rounded_box);
+        commentTextView.setTextSize(20);
+        commentTextView.setGravity(Gravity.CENTER_VERTICAL);
 
+        // Create the delete button
         ImageButton deleteButton = new ImageButton(requireContext());
         deleteButton.setImageResource(R.drawable.red_trash);
         deleteButton.setBackgroundColor(Color.TRANSPARENT);
         deleteButton.setOnClickListener(v -> deleteComment(commentLayout, commentText));
 
+        // Set layout parameters for the TextView
         LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(
+                0,
                 ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
-        textViewParams.setMargins(50, 0, 0, 16);
+                1.0f); // Weight is 1
+        textViewParams.setMargins(0, 0, 0, 0);
         commentTextView.setLayoutParams(textViewParams);
 
+        // Set layout parameters for the button
         LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         deleteButton.setLayoutParams(buttonParams);
 
+        // Add the TextView and the button to the layout
         commentLayout.addView(commentTextView);
         commentLayout.addView(deleteButton);
+
+        // Add the entire layout to the parent layout
         layoutComments.addView(commentLayout);
     }
     private void deleteComment(LinearLayout commentLayout, String commentText) {
