@@ -20,16 +20,6 @@ public class ProfileAdapter extends BaseAdapter {
     private ArrayList<String> imagePaths; // for external image paths
     private int[] imageResIds; // for drawable resource IDs
     private boolean useDrawableResources = false;
-    private final int[] imageIds = new int[]{
-            R.drawable.default_image1,
-            R.drawable.default_image2,
-            R.drawable.default_image3,
-            R.drawable.default_image4,
-            R.drawable.default_image5,
-            R.drawable.default_image6,
-            R.drawable.default_image7,
-            R.drawable.default_image8
-    };
 
     // Additional constructor for drawable resource IDs
     public ProfileAdapter(Context context, int[] imageResIds) {

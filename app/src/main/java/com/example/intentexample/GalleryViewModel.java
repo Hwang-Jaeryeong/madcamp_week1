@@ -17,7 +17,6 @@ public class GalleryViewModel extends ViewModel {
 
     private ArrayList<String> imagePaths = new ArrayList<>();
     private HashMap<String, ArrayList<String>> imageComments = new HashMap<>();
-    private ArrayList<String> comments = new ArrayList<>();
     private MutableLiveData<ArrayList<String>> commentsLiveData = new MutableLiveData<>();
 
     // Load image paths from SharedPreferences

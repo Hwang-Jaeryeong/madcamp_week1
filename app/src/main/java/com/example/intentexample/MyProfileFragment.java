@@ -32,8 +32,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MyProfileFragment extends Fragment {
-
-    private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView imageProfile;
     private String uploadedImagePath = null; // Path of the uploaded image
     private int selectedImageResId = -1;
@@ -169,23 +167,17 @@ public class MyProfileFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        // Inflate and set the layout for the dialog
-        // Pass null as the parent view because its going in the dialog layout
         View dialogView = inflater.inflate(R.layout.custom_qr_dialog, null);
         builder.setView(dialogView);
 
-        // Find the ImageView in the custom layout and set the QR code bitmap
         ImageView imageView = dialogView.findViewById(R.id.imageViewQRCode); // Replace with your ImageView ID
         imageView.setImageBitmap(qrBitmap);
 
         AlertDialog dialog = builder.create();
 
-        // Handling other UI elements in custom_qr_dialog.xml
-        // For example, setting a button's onClickListener
         Button closeButton = dialogView.findViewById(R.id.buttonClose); // Replace with your Button ID
         closeButton.setOnClickListener(v -> dialog.dismiss());
 
-        // Create and show the AlertDialog
         dialog.show();
     }
 
@@ -266,22 +258,5 @@ public class MyProfileFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    private String saveImageToInternalStorage(Uri uri) throws IOException {
-        InputStream inputStream = getActivity().getContentResolver().openInputStream(uri);
-        File file = new File(getActivity().getFilesDir(), "profile_image.jpg");
-        OutputStream outputStream = new FileOutputStream(file);
-
-        byte[] buffer = new byte[1024];
-        int length;
-        while ((length = inputStream.read(buffer)) > 0) {
-            outputStream.write(buffer, 0, length);
-        }
-
-        outputStream.close();
-        inputStream.close();
-
-        return file.getAbsolutePath();
     }
 }
