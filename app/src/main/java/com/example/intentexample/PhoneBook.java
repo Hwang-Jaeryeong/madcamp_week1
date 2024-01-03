@@ -145,7 +145,24 @@ public class PhoneBook extends Fragment {
         builder.setView(dialogView);
 
         final AlertDialog alertDialog = builder.create();
+        mailTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+                emailIntent.setData(Uri.parse("mailto:" + contact.getMail()));
 
+                // Optional: Add subject and body
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "");
+
+                // Use Intent.createChooser
+                if (emailIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(Intent.createChooser(emailIntent, "Choose an email client"));
+                } else {
+                    Toast.makeText(getActivity(), "No email app found", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         githubTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
