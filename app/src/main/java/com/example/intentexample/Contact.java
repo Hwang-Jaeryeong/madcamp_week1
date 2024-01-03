@@ -6,6 +6,7 @@ public class Contact {
     private String school;
     private String mail;
     private String github;
+    private int defaultImageResId = -1;
 
     // Constructor
     public Contact(String name, String phone, String school, String mail, String github) {
@@ -69,5 +70,13 @@ public class Contact {
     @Override
     public String toString() {
         return name;
+    }
+
+    public int getDefaultImageResId() {
+        return defaultImageResId;
+    }
+
+    public void setDefaultImageResId(int defaultImageResId) {
+        this.defaultImageResId = defaultImageResId;
     }
 }

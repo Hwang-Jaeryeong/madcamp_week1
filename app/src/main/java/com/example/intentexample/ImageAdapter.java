@@ -16,21 +16,32 @@ import java.util.ArrayList;
 public class ImageAdapter extends BaseAdapter {
 
     private final Context context;
-    private final ArrayList<String> imagePaths;
+    private ArrayList<String> imagePaths; // for external image paths
+    private int[] imageResIds; // for drawable resource IDs
+    private boolean useDrawableResources = false;
 
+    // Constructor for external image paths
     public ImageAdapter(Context context, ArrayList<String> imagePaths) {
         this.context = context;
         this.imagePaths = imagePaths;
+        this.useDrawableResources = false;
+    }
+
+    // Additional constructor for drawable resource IDs
+    public ImageAdapter(Context context, int[] imageResIds) {
+        this.context = context;
+        this.imageResIds = imageResIds;
+        this.useDrawableResources = true;
     }
 
     @Override
     public int getCount() {
-        return imagePaths.size();
+        return useDrawableResources ? imageResIds.length : imagePaths.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return imagePaths.get(position);
+        return useDrawableResources ? imageResIds[position] : imagePaths.get(position);
     }
 
     @Override
@@ -50,12 +61,15 @@ public class ImageAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         }
 
-        Bitmap bitmap = BitmapFactory.decodeFile(new File(imagePaths.get(position)).getAbsolutePath());
+        if (useDrawableResources) {
+            imageView.setImageResource(imageResIds[position]);
+        } else {
+            Bitmap bitmap = BitmapFactory.decodeFile(new File(imagePaths.get(position)).getAbsolutePath());
+            float rotation = getSavedRotationForImage(imagePaths.get(position));
+            imageView.setRotation(rotation);
+            imageView.setImageBitmap(bitmap);
+        }
 
-        float rotation = getSavedRotationForImage(imagePaths.get(position));
-        imageView.setRotation(rotation);
-
-        imageView.setImageBitmap(bitmap);
         return imageView;
     }
 

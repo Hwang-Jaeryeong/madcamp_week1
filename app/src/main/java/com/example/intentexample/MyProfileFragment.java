@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -39,6 +40,8 @@ public class MyProfileFragment extends Fragment {
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView imageProfile;
+    private String uploadedImagePath = null; // Path of the uploaded image
+    private int selectedImageResId = -1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,8 +70,12 @@ public class MyProfileFragment extends Fragment {
         editTextMail.setText(mail);
         editTextGithub.setText(github);
 
+        int savedImageResId = sharedPreferences.getInt("profileImageId", -1);
+
         if (photoPath != null) {
             imageProfile.setImageURI(Uri.parse(photoPath));
+        } else if (savedImageResId != -1) {
+            imageProfile.setImageResource(savedImageResId);
         }
 
         // 뒤로 가기 버튼 ImageView 찾기
@@ -86,7 +93,7 @@ public class MyProfileFragment extends Fragment {
         });
 
 
-        Button buttonUploadPhoto = view.findViewById(R.id.buttonUploadPhoto);
+        Button buttonUploadPhoto = view.findViewById(R.id.buttonChoosePhoto);
         buttonUploadPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,6 +134,8 @@ public class MyProfileFragment extends Fragment {
         String school = sharedPreferences.getString("school", "");
         String mail = sharedPreferences.getString("mail", "");
         String github = sharedPreferences.getString("github", "");
+        String photoPath = sharedPreferences.getString("photoPath", null);
+        int imageResId = sharedPreferences.getInt("profileImageId", -1);
 
         JSONObject jsonObject = new JSONObject();
         try {
@@ -135,6 +144,11 @@ public class MyProfileFragment extends Fragment {
             jsonObject.put("school", school);
             jsonObject.put("mail", mail);
             jsonObject.put("github", github);
+            if (photoPath != null) {
+                jsonObject.put("photoPath", photoPath);
+            } else if (imageResId != -1) {
+                jsonObject.put("profileImageId", imageResId);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -200,39 +214,52 @@ public class MyProfileFragment extends Fragment {
         editor.putString("school", school);
         editor.putString("mail", mail);
         editor.putString("github", github);
+
+        if (uploadedImagePath != null) {
+            // Save the path of the uploaded image
+            editor.putString("photoPath", uploadedImagePath);
+        } else if (selectedImageResId != -1) {
+            // Save the resource ID of the selected default image
+            editor.putInt("profileImageId", selectedImageResId);
+        }
+
+        editor.apply();
         editor.apply();
     }
 
     private void openImageChooser() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        showImageChoiceDialog();
+    }
+
+    private void showImageChoiceDialog() {
+        final int[] imageIds = new int[]{R.drawable.default_image1, R.drawable.default_image2, R.drawable.default_image3}; // add your image IDs here
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.image_choice_dialog, null);
+        builder.setView(dialogView);
+
+        AlertDialog dialog = builder.create();
+
+        GridView gridView = dialogView.findViewById(R.id.gridView); // make sure you have a GridView in your dialog layout
+        gridView.setAdapter(new ImageAdapter(getActivity(), imageIds));
+        gridView.setOnItemClickListener((parent, view, position, id) -> {
+            selectedImageResId = imageIds[position];
+            updateProfileImage(selectedImageResId);
+            uploadedImagePath = null; // Reset the uploaded image path
+            dialog.dismiss(); // This should dismiss the dialog without issue
+        });
+        Button closeButton = dialogView.findViewById(R.id.buttonClose); // Ensure this ID is correct
+        closeButton.setOnClickListener(v -> dialog.dismiss());
+        dialog.show();
+    }
+
+    private void updateProfileImage(int imageResId) {
+        imageProfile.setImageResource(imageResId);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
-            Uri imageUri = data.getData();
-            try {
-                String imagePath = saveImageToInternalStorage(imageUri);
-                SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("photoPath", imagePath);
-                editor.apply();
-
-                // Clear the ImageView's cache
-                imageProfile.setImageDrawable(null);
-
-                // Force the ImageView to update with the new image
-                imageProfile.setImageURI(null);
-                imageProfile.setImageURI(Uri.parse(imagePath));
-
-            } catch (IOException e) {
-                Log.e("MyProfileFragment", "Error saving image", e);
-            }
-        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private String saveImageToInternalStorage(Uri uri) throws IOException {

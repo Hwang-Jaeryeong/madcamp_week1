@@ -33,6 +33,8 @@ import com.google.gson.reflect.TypeToken;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -57,12 +59,15 @@ public class PhoneBook extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d("PhoneBook", "onCreateView called");
         View view = inflater.inflate(R.layout.phonebook, container, false);
+
         listView = view.findViewById(R.id.listView);
         contactList = loadContacts();
         originalContactList = new ArrayList<>(contactList);
 
-        adapter = new ArrayAdapter<Contact>(getContext(), R.layout.list_item, R.id.textViewItem, contactList);
+        // Initialize and set the ContactAdapter
+        adapter = new ContactAdapter(getContext(), contactList);
         listView.setAdapter(adapter);
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -77,10 +82,12 @@ public class PhoneBook extends Fragment {
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 // Not used
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 filterContacts(charSequence.toString());
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
                 // Not used
@@ -91,7 +98,6 @@ public class PhoneBook extends Fragment {
         myProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Code to open the new fragment
                 MyProfileFragment myProfileFragment = new MyProfileFragment();
                 getFragmentManager().beginTransaction()
                         .replace(R.id.container, myProfileFragment)
@@ -99,6 +105,7 @@ public class PhoneBook extends Fragment {
                         .commit();
             }
         });
+
         ImageButton addProfileButton = view.findViewById(R.id.AddProfile);
         addProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,6 +113,7 @@ public class PhoneBook extends Fragment {
                 startQRScanner();
             }
         });
+
         return view;
     }
 
@@ -332,25 +340,24 @@ public class PhoneBook extends Fragment {
     }
     private void addContactFromQRCode(String jsonData) {
         try {
-            Log.d("PhoneBook", "QR Data: " + jsonData);
-
             Gson gson = new Gson();
-            Contact newContact = gson.fromJson(jsonData, Contact.class);
+            JSONObject jsonObject = new JSONObject(jsonData);
 
-            if (newContact != null) {
-                contactList.add(newContact);
-                originalContactList.add(newContact);
+            Contact newContact = gson.fromJson(jsonObject.toString(), Contact.class);
 
-                adapter.notifyDataSetChanged();
-                saveJsonToStorage(gson.toJson(contactList));
-
-                Toast.makeText(getActivity(), "Added Successfully", Toast.LENGTH_SHORT).show();
-            } else {
-                Log.d("PhoneBook", "Parsed contact is null.");
+            if (jsonObject.has("profileImageId")) {
+                int imageResId = jsonObject.getInt("profileImageId");
+                newContact.setDefaultImageResId(imageResId); // Assuming Contact class has this field and setter
             }
+
+            contactList.add(newContact);
+            originalContactList.add(newContact);
+            adapter.notifyDataSetChanged();
+            saveJsonToStorage(gson.toJson(contactList));
+
+            Toast.makeText(getActivity(), "Added Successfully", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e("PhoneBook", "Error parsing QR Data", e);
             Toast.makeText(getActivity(), "Error adding contact from QR code", Toast.LENGTH_SHORT).show();
         }
         sortContacts();
