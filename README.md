@@ -5,7 +5,7 @@
 ### 개발자들의 프로젝트 관리를 위한 Platform
 ## 프로젝트 소개
 
-![main_img](https://user-images.githubusercontent.com/37971925/148037772-2f25ff79-0f50-4652-a902-6f33ca711cc1.png)
+![main_image](https://github.com/Hwang-Jaeryeong/madcamp_week1/assets/113423770/1b170bdc-31e7-4e35-a5f2-95295e761dca)
 
 ## 과제 소개
 이번 1주차 과제는 다음과 같이 3개의 탭으로 구성된 어플리케이션을 개발하는 것이다.
