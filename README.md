@@ -199,7 +199,7 @@ public static ImageDialogFragment newInstance(String imagePath, ArrayList<String
             }
         }
     }
- ```
+```
 
 ### 3번탭
 ***
