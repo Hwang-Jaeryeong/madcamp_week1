@@ -201,7 +201,8 @@ public static ImageDialogFragment newInstance(String imagePath, ArrayList<String
                 comments = loadCommentsFromSharedPreferences(imageKey);
             }
         }
-    }```
+    }
+```
 <br>
 
 
