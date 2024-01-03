@@ -115,6 +115,36 @@ deleteButton.setOnClickListener(new View.OnClickListener() {
 ![두번째 탭](https://user-images.githubusercontent.com/37971925/148053534-aade4c37-67cd-419d-9c17-435728f30c57.png)
 
 사진은 json 파일로 하려다가 sns의 취지를 살리기 위해 디바이스의 사진첩과 연동하여 해당하는 그리드에 등록되도록 구성했다. 
+```java
+private void registerImagePickerLauncher() {
+        pickImageLauncher = registerForActivityResult(
+                new ActivityResultContracts.GetContent(),
+                result -> {
+                    if (result != null) {
+                        try {
+                            // Convert Uri to Bitmap
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), result);
+
+                            // Save the bitmap to internal storage and get the path
+                            String imagePath = InternalStorageUtil.saveToInternalStorage(requireContext(), bitmap);
+
+                            // Add the image path to the view model
+                            viewModel.addImagePath(imagePath);
+                            imageAdapter.notifyDataSetChanged();
+
+                            // Save updated paths to SharedPreferences
+                            viewModel.saveImagePaths(requireContext());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            Toast.makeText(requireContext(), "Failed to save image", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Toast.makeText(requireContext(), "Image upload failed", Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+    }
+```
 
 사진 클릭 시 게시글을 볼 수 있는 Fragment를 실행한다. 
 이때 Fragment를 전환하면서 애니메이션을 추가했는데, 아래와 같은 코드로 Fragment 간의 전환에 애니메이션을 실행할 수 있다.
@@ -136,7 +166,40 @@ deleteButton.setOnClickListener(new View.OnClickListener() {
 <br>
 fragment 밑에는 comment를 달 수 있도록 화면을 구성했다. 코멘트를 등록해 간단한 메모 형식으로 자신의 코드 진행 상황을 작성할 수 있다.
 메모와 사진 등록 전부 다 동적인 요소이기에 앱을 껐다 키거나 창을 닫았다 열어도 유지되도록 하는 것에 상당 시간을 쏟아 해결하였는데 이미지는 byte 형식으로 바꾸어 map에 저장하여 sharedPreferenced 와 함께 이용했으며 
-메모와 해당 사진이 연동되게 사진과 메모에 고유의 id를 부여하여 서로 연동시켰다.
+메모와 해당 사진이 연동되게 사진과 메모에 고유의 id를 부여하여 서로 연동시킨 후 SharedPreferences에 함꼐 저장하였다.
+```java
+public static ImageDialogFragment newInstance(String imagePath, ArrayList<String> comments) {
+        ImageDialogFragment fragment = new ImageDialogFragment();
+        Bundle args = new Bundle();
+        args.putString("imagePath", imagePath);
+        args.putStringArrayList("comments", comments);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+
+        if (getArguments() != null) {
+            String imagePath = getArguments().getString("imagePath");
+            comments = getArguments().getStringArrayList("comments");
+
+            // Generate a unique key for SharedPreferences based on the image path
+            imageKey = PREF_COMMENTS_KEY_PREFIX + imagePath.hashCode();
+
+            sharedPreferences = requireContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+
+            if (savedInstanceState != null) {
+                comments = savedInstanceState.getStringArrayList(ARG_COMMENTS);
+            } else {
+                // 이미지에 대한 메모 불러오기
+                comments = loadCommentsFromSharedPreferences(imageKey);
+            }
+        }
+    }
+ ```
 
 ### 3번탭
 ***
