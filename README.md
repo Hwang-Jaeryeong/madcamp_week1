@@ -27,7 +27,7 @@ JSON 데이터를 효과적으로 다룰 수 있는 라이브러리를 찾다가
 입력창에 입력한 정보(미모티콘, 이름, 학교, 연락처, 깃허브 주소, 이메일)를 QR 코드에 저장 후 정보를 담아 QR 코드를 생성할 수 있고 다른 사람의 QR 코드를 읽어올 수 있으며, Activity의 경우 onActivityResult() 함수를 Override하여 결과 값을 받아올 수 있다.
 QR 코드를 인식하는 즉시 사용자의 연락처 목록에 자동으로 업데이트 되도록 구현했다.
 
-<img src="https://github.com/Hwang-Jaeryeong/madcamp_week1/assets/113423770/102cc8e7-31a7-4ae5-bfa0-0c81d37dfc1a  width="200" height="400"/>
+<img src="https://github.com/Hwang-Jaeryeong/madcamp_week1/assets/113423770/102cc8e7-31a7-4ae5-bfa0-0c81d37dfc1a.gif  width="200" height="400"/>
 *QR코드 정보입력.gif*
 <br>
 정보 입력 fragment에는 자신의 미모티콘을 고를 수 있는 image 칸이 있다. 자신을 나타낼 수 있는 미모티콘을 선택해서 저장 후 QR 코드를 생성하면 상대의 list에도 자신이 선택한 미모티콘이 함께 뜨게 된다.
