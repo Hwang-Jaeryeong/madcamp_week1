@@ -6,4 +6,5 @@
     android:padding="16dp"
     android:textSize="18sp"
     android:textColor="#FFFFFF"
-    android:gravity="center_vertical" />
+    android:gravity="center_vertical"
+    android:fontFamily="@font/hel"/>
