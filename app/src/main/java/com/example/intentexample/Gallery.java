@@ -7,6 +7,7 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -125,13 +126,31 @@ public class Gallery extends Fragment {
     }
 
     private void showDeleteConfirmationDialog(int position) {
-        new AlertDialog.Builder(getContext())
-                .setTitle("Delete Photo")
-                .setMessage("Are you sure you want to delete this photo?")
-                .setPositiveButton("Delete", (dialog, which) -> deletePhoto(position))
-                .setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.dismiss())
-                .create()
-                .show();
+        // Inflate the custom layout
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.delete_dialog_photo, null);
+
+        // Create the dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setView(dialogView);
+
+        // Find buttons in the layout and cast them correctly as ImageButtons
+        ImageButton deleteButton = dialogView.findViewById(R.id.deleteButtonP);
+        ImageButton cancelButton = dialogView.findViewById(R.id.cancelButtonP);
+
+        // Create the AlertDialog before setting button listeners
+        AlertDialog alertDialog = builder.create();
+
+        // Set up buttons and their click listeners
+        deleteButton.setOnClickListener(v -> {
+            deletePhoto(position);
+            alertDialog.dismiss();
+        });
+
+        cancelButton.setOnClickListener(v -> alertDialog.dismiss());
+
+        // Show the AlertDialog
+        alertDialog.show();
     }
     private void deletePhoto(int position) {
         // Remove the image path from the ViewModel

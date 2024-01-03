@@ -1,0 +1,67 @@
+<!-- delete_dialog.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:background="@color/tab_color">
+
+    <ImageView
+        android:layout_marginTop="13dp"
+        android:id="@+id/deleteImageP"
+        android:layout_width="match_parent"
+        android:layout_height="26dp"
+        tools:srcCompat="@drawable/delete"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/titleTextViewP"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/deleteImageP"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="Delete Photo?"
+        android:fontFamily="@font/hel_black"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/messageTextViewP"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/titleTextViewP"
+        android:layout_marginTop="7dp"
+        android:gravity="center"
+        android:fontFamily="@font/hel"
+        android:text="This photo will be removed from all your synced devices. This action cannot be undone."
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
+
+    <ImageButton
+        android:id="@+id/deleteButtonP"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:src="@drawable/delete_button"
+        android:layout_below="@id/messageTextViewP"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="0dp"
+        android:background="@color/tab_color"/>
+
+    <ImageButton
+        android:id="@+id/cancelButtonP"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/messageTextViewP"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="0dp"
+        android:layout_toLeftOf="@id/deleteButtonP"
+        android:background="@color/tab_color"
+        android:src="@drawable/cancel_button" />
+</RelativeLayout>
+
