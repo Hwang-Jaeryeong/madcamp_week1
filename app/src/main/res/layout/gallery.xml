@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/applefont"
                 android:paddingTop="5dp"
-                android:text="황재령"
+                android:text="몰입캠프"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="20dp"
@@ -40,7 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/hel"
-                android:text="Ewha w. univ, CSE"
+                android:text="kaist, Daejeon"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="15dp" />
@@ -57,10 +57,12 @@
         android:orientation="vertical"
         android:padding="10dp">
 
+        <!-- 이미지 추가 버튼 -->
+
         <GridView
             android:id="@+id/feed_gallery_view"
             android:layout_width="match_parent"
-            android:layout_height="423dp"
+            android:layout_height="485dp"
             android:layout_weight="1"
             android:gravity="center"
             android:horizontalSpacing="5dp"
@@ -68,7 +70,6 @@
             android:padding="16dp"
             android:verticalSpacing="5dp" />
 
-        <!-- 이미지 추가 버튼 -->
         <ImageButton
             android:id="@+id/btn_add_pic"
             android:layout_width="match_parent"
