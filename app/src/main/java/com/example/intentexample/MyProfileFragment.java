@@ -258,6 +258,7 @@ public class MyProfileFragment extends Fragment {
 
         // Setup the close button
         Button closeButton = dialogView.findViewById(R.id.buttonClose);
+        closeButton.setBackgroundColor(getResources().getColor(R.color.nav_bar_deactive));
         closeButton.setOnClickListener(v -> dialog.dismiss());
 
         dialog.show();
