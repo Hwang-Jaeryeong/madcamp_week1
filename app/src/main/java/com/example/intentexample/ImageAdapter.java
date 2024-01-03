@@ -67,6 +67,7 @@ public class ImageAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.grid_item, parent, false);
             imageView = convertView.findViewById(R.id.imageViewGridItem);
+            imageView.setLayoutParams(new ViewGroup.LayoutParams(440, 440));
         } else {
             imageView = (ImageView) convertView;
         }
