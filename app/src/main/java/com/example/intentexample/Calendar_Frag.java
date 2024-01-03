@@ -121,7 +121,7 @@ public class Calendar_Frag extends Fragment {
                                 int minute = numberPickerMinute.getValue();
                                 String time = String.format("%02d:%02d", hour, minute);
                                 String planText = editTextSchedule.getText().toString();
-                                String planWithTime = time + " - " + planText;
+                                String planWithTime = time + " - " + planText + " (" + System.currentTimeMillis() + ")";
 
                                 CalendarDay selectedDate = materialCalendarView.getSelectedDate();
                                 savePlanToSharedPreferences(selectedDate, planWithTime);
@@ -218,28 +218,35 @@ public class Calendar_Frag extends Fragment {
             addPlanToScrollView(plan, date);
         }
     }
+    private int generateCheckBoxId(CalendarDay date, String planText) {
+        // Use a combination of the date and a unique identifier within the plan text
+        String uniqueIdentifier = extractUniqueIdentifier(planText);
+        return (date.toString() + "_" + uniqueIdentifier).hashCode();
+    }
+    private String extractUniqueIdentifier(String planText) {
+        String[] parts = planText.split(" ");
+        return parts[parts.length - 1];
+    }
 
-    private void saveCheckBoxState(CheckBox checkBox, CalendarDay date, int planPosition) {
-        // Save checkbox state to SharedPreferences based on the date and plan position
+    private void saveCheckBoxState(CheckBox checkBox, String checkBoxKey) {
         SharedPreferences preferences = getActivity().getSharedPreferences("CheckBoxStates", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(getCheckBoxKey(date, planPosition), checkBox.isChecked());
+        editor.putBoolean(checkBoxKey, checkBox.isChecked());
         editor.apply();
     }
 
-    private void loadCheckBoxState(CheckBox checkBox, CalendarDay date, int planPosition) {
-        // Load checkbox state from SharedPreferences based on the date and plan position
+    private void loadCheckBoxState(CheckBox checkBox, String checkBoxKey) {
         SharedPreferences preferences = getActivity().getSharedPreferences("CheckBoxStates", Context.MODE_PRIVATE);
-        boolean isChecked = preferences.getBoolean(getCheckBoxKey(date, planPosition), false);
+        boolean isChecked = preferences.getBoolean(checkBoxKey, false);
         checkBox.setChecked(isChecked);
     }
-
     private String getCheckBoxKey(CalendarDay date, int planPosition) {
         // Generate a unique key for the checkbox based on the date and plan position
         return "checkbox_" + date.toString() + "_" + planPosition;
     }
 
-    private void addPlanToScrollView(String planText, CalendarDay date) {
+    private void addPlanToScrollView(String planTextWithTimestamp, CalendarDay date) {
+        String planText = extractPlanText(planTextWithTimestamp);
         TextView planView = new TextView(getActivity());
         planView.setText(planText);
         planView.setTextAppearance(getActivity(), R.style.CustomTextViewStyle);
@@ -269,6 +276,7 @@ public class Calendar_Frag extends Fragment {
 
         // Create a CheckBox
         CheckBox checkBox = new CheckBox(getActivity());
+        String checkBoxKey = "checkbox_" + generateCheckBoxId(date, planTextWithTimestamp);
         checkBox.setLayoutParams(new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT));
@@ -325,7 +333,7 @@ public class Calendar_Frag extends Fragment {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deletePlanFromSharedPreferences(date, planText);
+                deletePlanFromSharedPreferences(date, planTextWithTimestamp);
                 updateScrollViewForDate(date);
                 updateCalendarWithEvents(true);
             }
@@ -333,28 +341,57 @@ public class Calendar_Frag extends Fragment {
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                saveCheckBoxState(checkBox, date, planPosition);
+                saveCheckBoxState(checkBox, checkBoxKey);
             }
         });
         // Load checkbox state from SharedPreferences
-        loadCheckBoxState(checkBox, date, planPosition);
+        loadCheckBoxState(checkBox, checkBoxKey);
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // Save the checkbox state using the checkBoxKey
+                saveCheckBoxState(checkBox, checkBoxKey);
+            }
+        });
 
         // Add RelativeLayout to the ScrollView
         scrollViewLayout.addView(relativeLayout);
+    }
+    private String extractPlanText(String planTextWithTimestamp) {
+        // Assuming the format is "HH:mm - Plan text (timestamp)"
+        int lastParenthesisIndex = planTextWithTimestamp.lastIndexOf("(");
+        if (lastParenthesisIndex != -1) {
+            return planTextWithTimestamp.substring(0, lastParenthesisIndex).trim();
+        }
+        return planTextWithTimestamp; // Fallback in case the format is not as expected
     }
     private int generateCheckBoxId(CalendarDay date, int planPosition) {
         // 날짜와 계획 위치를 기반으로 체크박스에 고유 ID 생성
         return (date.hashCode() & 0xFFFFFFF) * 10 + planPosition;
     }
 
-    private void deletePlanFromSharedPreferences(CalendarDay date, String planText) {
+    private void deletePlanFromSharedPreferences(CalendarDay date, String planTextWithTimestamp) {
         List<String> plans = getPlansForDate(date);
-        plans.remove(planText);
+        String planText = extractPlanText(planTextWithTimestamp); // Extract the plan text without timestamp
 
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        JSONArray jsonArray = new JSONArray(plans);
-        editor.putString(date.toString(), jsonArray.toString());
-        editor.apply();
+        // Find the exact plan to delete (including its timestamp)
+        String planToDelete = null;
+        for (String storedPlan : plans) {
+            if (extractPlanText(storedPlan).equals(planText)) {
+                planToDelete = storedPlan;
+                break;
+            }
+        }
+
+        if (planToDelete != null) {
+            plans.remove(planToDelete);
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            JSONArray jsonArray = new JSONArray(plans);
+            editor.putString(date.toString(), jsonArray.toString());
+            editor.apply();
+        }
+
         updateCalendarWithEvents(true);
     }
 }

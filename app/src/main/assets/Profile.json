@@ -1,19 +1,9 @@
 [
-  {"name": "Son Dayun",
-    "phone": "01074282640",
-    "school": "KAIST",
-    "mail":  "kesler@kaist.ac.kr",
-    "github": "https://github.com/kesler1202"},
-
-  {"name": "John Doe",
-    "phone": "01012345678",
-    "school": "MIT",
-    "mail":  "xyzabc@gmail.com",
-    "github": ""},
-
-  {"name": "Hong Gildong",
-    "phone": "01015571601",
-    "school": "Hankook University",
-    "mail":  "abcxyz@naver.com",
-    "github": ""}
+  {
+    "name" : "son dayun",
+    "phone" : "01074282640",
+    "school" : "KAIST",
+    "mail" : "kesler@kaist.ac.kr",
+    "github" : "https://github.com/kesler1202"
+  }
 ]
