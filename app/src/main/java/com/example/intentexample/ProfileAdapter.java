@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import java.io.File;
 import java.util.ArrayList;
 
-public class ImageAdapter extends BaseAdapter {
+public class ProfileAdapter extends BaseAdapter {
 
     private final Context context;
     private ArrayList<String> imagePaths; // for external image paths
@@ -31,11 +31,11 @@ public class ImageAdapter extends BaseAdapter {
             R.drawable.default_image8
     };
 
-    // Constructor for external image paths
-    public ImageAdapter(Context context, ArrayList<String> imagePaths) {
+    // Additional constructor for drawable resource IDs
+    public ProfileAdapter(Context context, int[] imageResIds) {
         this.context = context;
-        this.imagePaths = imagePaths;
-        this.useDrawableResources = false;
+        this.imageResIds = imageResIds;
+        this.useDrawableResources = true;
     }
 
     @Override
@@ -58,27 +58,15 @@ public class ImageAdapter extends BaseAdapter {
         ImageView imageView;
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.grid_item_gallery, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.grid_item, parent, false);
         }
         imageView = convertView.findViewById(R.id.imageViewGridItem);
 
         if (useDrawableResources) {
             imageView.setImageResource(imageResIds[position]);
             imageView.setScaleType(ImageView.ScaleType.FIT_CENTER); // Adjust scaleType for drawable resources
-        } else {
-            Bitmap bitmap = BitmapFactory.decodeFile(new File(imagePaths.get(position)).getAbsolutePath());
-            float rotation = getSavedRotationForImage(imagePaths.get(position));
-            imageView.setRotation(rotation);
-            imageView.setImageBitmap(bitmap);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP); // Adjust scaleType for bitmap images
         }
 
         return convertView;
-    }
-
-    private float getSavedRotationForImage(String imagePath) {
-        SharedPreferences prefs = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-        String key = "Comments_" + imagePath.hashCode() + "_rotation";
-        return prefs.getFloat(key, 0.0f);
     }
 }

@@ -28,8 +28,6 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
 
         if (contact.getDefaultImageResId() != -1) {
             imageView.setImageResource(contact.getDefaultImageResId());
-        } else {
-            imageView.setImageResource(R.drawable.default_image); // Set a default image if none is specified
         }
 
         textViewName.setText(contact.getName());

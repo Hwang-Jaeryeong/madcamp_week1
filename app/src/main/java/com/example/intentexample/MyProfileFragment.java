@@ -1,6 +1,5 @@
 package com.example.intentexample; // Use your own package name
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,11 +28,8 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MyProfileFragment extends Fragment {
 
@@ -246,7 +241,7 @@ public class MyProfileFragment extends Fragment {
         AlertDialog dialog = builder.create();
 
         GridView gridView = dialogView.findViewById(R.id.gridView);
-        gridView.setAdapter(new ImageAdapter(getActivity(), imageIds));
+        gridView.setAdapter(new ProfileAdapter(getActivity(), imageIds));
         gridView.setNumColumns(4); // Adjust as needed
 
         gridView.setOnItemClickListener((parent, view, position, id) -> {
