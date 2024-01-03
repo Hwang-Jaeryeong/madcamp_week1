@@ -22,10 +22,22 @@
     <style name="Theme.YourApp.Splash" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@color/tab_color</item>
     </style>
+
     <style name="CustomTextViewStyle" parent="@android:style/Widget.TextView">
         <item name="android:fontFamily">@font/hel</item>
         <item name="android:textColor">@color/white</item>
     </style>
+
+    <style name="DialogFragmentTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
+    <style name="DialogAnimation" parent="@android:style/Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/fade_in</item>
+        <item name="android:windowExitAnimation">@anim/fade_out</item>
+    </style>
+
 
 
 </resources>

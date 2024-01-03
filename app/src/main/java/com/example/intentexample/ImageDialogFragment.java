@@ -1,4 +1,5 @@
 package com.example.intentexample;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -59,6 +60,7 @@ public class ImageDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogFragmentTheme);
         setRetainInstance(true);
 
         if (getArguments() != null) {
@@ -66,7 +68,7 @@ public class ImageDialogFragment extends DialogFragment {
             comments = getArguments().getStringArrayList("comments");
 
             // Generate a unique key for SharedPreferences based on the image path
-            imageKey = PREF_COMMENTS_KEY_PREFIX + imagePath.hashCode(); // Example
+            imageKey = PREF_COMMENTS_KEY_PREFIX + imagePath.hashCode();
 
             sharedPreferences = requireContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
 
@@ -122,6 +124,7 @@ public class ImageDialogFragment extends DialogFragment {
 
         closeButton.setOnClickListener(v -> {
             getParentFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
                     .remove(ImageDialogFragment.this)
                     .addToBackStack(null)
                     .commit();

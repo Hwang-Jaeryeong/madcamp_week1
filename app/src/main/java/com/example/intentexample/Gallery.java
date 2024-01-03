@@ -16,6 +16,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.io.IOException;
@@ -185,10 +186,13 @@ public class Gallery extends Fragment {
                 }
             });
 
-            // Display the ImageDialogFragment using FragmentTransaction
-            getParentFragmentManager().beginTransaction()
-                    .replace(android.R.id.content, dialogFragment)
-                    .addToBackStack(null)  // Add to back stack for back navigation support
+            // 애니메이션을 포함한 FragmentTransaction 설정
+            FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+
+            // FragmentTransaction을 사용하여 ImageDialogFragment 표시
+            transaction.replace(android.R.id.content, dialogFragment)
+                    .addToBackStack(null)  // 뒤로 가기 지원을 위해 백 스택에 추가
                     .commit();
         }
     }
