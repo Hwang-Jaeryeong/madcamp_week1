@@ -81,8 +81,10 @@ public void startQRScanner() {
  
 & 
 
-<img src="https://github.com/Hwang-Jaeryeong/madcamp_week1/assets/113423770/5d682e4e-0fa4-4681-9798-d82b73195d4f" 
- width="170" height="400"/>
+<div style="display: flex; justify-content: center;">
+    <img src="https://github.com/Hwang-Jaeryeong/madcamp_week1/assets/113423770/5d682e4e-0fa4-4681-9798-d82b73195d4f" width="170" height="400" />
+</div>
+
 *검색 기능 작동 예시.gif*
 <br>
 
