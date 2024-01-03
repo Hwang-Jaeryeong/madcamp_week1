@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -135,7 +136,8 @@ public class Gallery extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setView(dialogView);
 
-        // Find buttons in the layout and cast them correctly as ImageButtons
+        ImageView deleteImage = dialogView.findViewById(R.id.deleteImageP);
+        deleteImage.setImageResource(R.drawable.delete);
         ImageButton deleteButton = dialogView.findViewById(R.id.deleteButtonP);
         ImageButton cancelButton = dialogView.findViewById(R.id.cancelButtonP);
 
